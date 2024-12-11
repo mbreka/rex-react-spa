@@ -10,7 +10,8 @@
     "coverage": "jest --coverage",
     "lint": "eslint",
     "check": "tsc --noEmit",
-    "clear": "rm -rf dist node_modules .parcel-cache"
+    "format": "prettier ./src --write",
+    "clear": "rm -rf dist node_modules .parcel-cache coverage"
   },
   "dependencies": {
     "react": "19.0.0",
