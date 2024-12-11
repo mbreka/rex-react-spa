@@ -10,7 +10,7 @@
     "coverage": "jest --coverage",
     "lint": "eslint",
     "check": "tsc --noEmit",
-    "format": "prettier ./src --write",
+    "format": "prettier \"./**/*.(js|jsx|ts|tsx|json|html|css)\" --write",
     "clear": "rm -rf dist node_modules .parcel-cache coverage"
   },
   "dependencies": {
