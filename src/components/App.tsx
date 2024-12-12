@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import "./App.css";
+import { products, login, me } from "@/api";
 
 const App: FC = () => {
   return (
@@ -8,8 +8,18 @@ const App: FC = () => {
       <a href="/" target="_blank" rel="noopener noreferrer">
         learn react
       </a>
+      <button
+        onClick={async () => {
+          const x = await login();
+          const y = await me(x.accessToken);
+          console.log(y);
+          console.log(y.age);
+        }}
+      >
+        login
+      </button>
     </div>
   );
 };
 
-export default App;
+export { App };
