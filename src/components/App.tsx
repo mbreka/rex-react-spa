@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { products, login, me } from "@/api";
+import { products, login, me, refresh } from "@/api";
 
 const App: FC = () => {
   return (
@@ -12,8 +12,10 @@ const App: FC = () => {
         onClick={async () => {
           const x = await login();
           const y = await me(x.accessToken);
+          const z = await refresh(x.refreshToken);
           console.log(y);
           console.log(y.age);
+          console.log(z);
         }}
       >
         login

@@ -1,7 +1,10 @@
 import React, { FC } from "react";
-import { AppShell, Burger, Group, Skeleton, Box, Text } from "@mantine/core";
+import { AppShell, Burger, Group, Skeleton, Box, Text, ScrollArea } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import logo from "../../public/logo.svg";
+import { App } from "./App";
+import { ProductModal } from "./ProductModal";
+import { ProductsGrid } from "./ProductsGrid";
 
 const AppLayout: FC = () => {
   const [opened, { toggle }] = useDisclosure();
@@ -19,15 +22,23 @@ const AppLayout: FC = () => {
           <img src={logo} height={60} />
         </Group>
       </AppShell.Header>
-      <AppShell.Navbar p="md">
-        Navbar
-        {Array(15)
-          .fill(0)
-          .map((_, index) => (
-            <Skeleton key={index} h={28} mt="sm" animate={false} />
-          ))}
+      <AppShell.Navbar p="md" h={"100%"} style={{ overflowY: "scroll" }}>
+        <ScrollArea>
+          Navbar
+          {Array(15)
+            .fill(0)
+            .map((_, index) => (
+              <Skeleton key={index} h={28} mt="sm" animate={false} />
+            ))}
+        </ScrollArea>
       </AppShell.Navbar>
-      <AppShell.Main>Main</AppShell.Main>
+      <AppShell.Main>
+        Main
+        <App />
+
+      <ProductModal/>
+      <ProductsGrid/>
+      </AppShell.Main>
     </AppShell>
   );
 };
