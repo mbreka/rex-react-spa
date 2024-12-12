@@ -11,6 +11,8 @@ export interface ResponseBaseI {
   limit?: number;
 }
 
+type Date = string;
+
 /* * * * * * * * * * * * * * * * * * * * *
  *             PRODUCTS                  *
  * * * * * * * * * * * * * * * * * * * * */
@@ -227,26 +229,9 @@ export interface LoginResponseI {
   image: string;
 }
 
-export interface MeResponseI {
-  accessToken: string;
-  refreshToken: string;
-  id: number;
-  username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  gender: string;
-  image: string;
-}
+export interface MeResponseI extends UserI {}
 
 export interface RefreshResponseI {
   accessToken: string;
   refreshToken: string;
-  id: number;
-  username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  gender: string;
-  image: string;
 }

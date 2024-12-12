@@ -14,15 +14,15 @@
     "clear": "rm -rf dist node_modules .parcel-cache coverage"
   },
   "dependencies": {
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
     "@mantine/core": "7.15.0",
     "@mantine/dates": "7.15.0",
     "@mantine/form": "7.15.0",
     "@mantine/hooks": "7.15.0",
     "dayjs": "1.11.13",
-    "react": "19.0.0",
-    "react-dom": "19.0.0"
-  },
-  "devDependencies": {
     "@babel/core": "7.26.0",
     "@babel/plugin-transform-flow-strip-types": "7.25.9",
     "@babel/plugin-transform-react-jsx": "7.25.9",
