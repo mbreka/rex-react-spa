@@ -13,7 +13,7 @@ const App: FC = () => {
       </a>
       <button
         onClick={async () => {
-          login("","")
+          login("", "");
         }}
       >
         login

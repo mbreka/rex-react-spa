@@ -15,7 +15,14 @@ import {
   Badge,
   Space,
 } from "@mantine/core";
-import { IconBrandGithub, IconLogin, IconLogout, IconSearch, IconShoppingBag, IconShoppingCartX } from "@tabler/icons-react";
+import {
+  IconBrandGithub,
+  IconLogin,
+  IconLogout,
+  IconSearch,
+  IconShoppingBag,
+  IconShoppingCartX,
+} from "@tabler/icons-react";
 import { FC, useState, useContext, useEffect } from "react";
 import { UserI } from "@/types/interfaces";
 
@@ -118,9 +125,14 @@ const AppNavbar: FC = () => {
       {user && <UserInfo user={user} />}
       {!user && <Guest />}
       <Space h={rem(50)} />
-      <Button leftSection={<IconBrandGithub/>} onClick={()=>{
-        window.location.assign("https://github.com/mbreka/rex-react-spa/network");
-      }} fullWidth variant="light">
+      <Button
+        leftSection={<IconBrandGithub />}
+        onClick={() => {
+          window.location.assign("https://github.com/mbreka/rex-react-spa/network");
+        }}
+        fullWidth
+        variant="light"
+      >
         Github Code
       </Button>
     </>

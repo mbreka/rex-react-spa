@@ -6,13 +6,15 @@ import { getProducts } from "@/api";
 import { ProductI, ReviewI } from "@/types/interfaces";
 
 const ReviewCard: FC<{ review: ReviewI }> = ({ review: { rating, comment, date, reviewerName, reviewerEmail } }) => {
-  return <>
-  <Text>{rating}</Text>
-  <Text>{comment}</Text>
-  <Text>{date}</Text>
-  <Text>{reviewerName}</Text>
-  <Text>{reviewerEmail}</Text>
-  </>;
+  return (
+    <>
+      <Text>{rating}</Text>
+      <Text>{comment}</Text>
+      <Text>{date}</Text>
+      <Text>{reviewerName}</Text>
+      <Text>{reviewerEmail}</Text>
+    </>
+  );
 };
 
 const ProductDetails: FC<{ product: ProductI }> = ({
@@ -75,7 +77,7 @@ const ProductModal: FC = () => {
 
   return (
     <>
-      <Modal opened={!!selected} size={'xl'} onClose={() => setSelected(undefined)} title="Product Description">
+      <Modal opened={!!selected} size={"xl"} onClose={() => setSelected(undefined)} title="Product Description">
         {!!selected && <ProductDetails product={selected} />}
       </Modal>
 
