@@ -75,11 +75,11 @@ const ProductModal: FC = () => {
 
   return (
     <>
-      <Modal opened={!!selected} onClose={() => setSelected(undefined)} title="Product Description">
+      <Modal opened={!!selected} size={'xl'} onClose={() => setSelected(undefined)} title="Product Description">
         {!!selected && <ProductDetails product={selected} />}
       </Modal>
 
-      <Button
+      {/* <Button
         variant="default"
         onClick={async () => {
           const allP = await getProducts();
@@ -87,7 +87,7 @@ const ProductModal: FC = () => {
         }}
       >
         Open modal
-      </Button>
+      </Button> */}
     </>
   );
 };

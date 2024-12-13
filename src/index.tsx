@@ -14,7 +14,6 @@ const root = createRoot(container!);
 root.render(
   <React.StrictMode>
     <GlobalProvider>
-      <App />
       <AppLayout />
     </GlobalProvider>
   </React.StrictMode>,
