@@ -5,6 +5,7 @@ import logo from "../../public/logo.svg";
 import { App } from "./App";
 import { ProductModal } from "./ProductModal";
 import { ProductsGrid } from "./ProductsGrid";
+import { AppNavbar } from "./AppNavbar";
 
 const AppLayout: FC = () => {
   const [opened, { toggle }] = useDisclosure();
@@ -18,23 +19,22 @@ const AppLayout: FC = () => {
       <AppShell.Header>
         <Group h="100%" px="md" justify="space-between">
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-          <Text>REX</Text>
+          <Text fw={900}>REX</Text>
           <img src={logo} height={60} />
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p="md" h={"100%"} style={{ overflowY: "scroll" }}>
         <ScrollArea>
-          Navbar
-          {Array(15)
+          <AppNavbar/>
+          {/* {Array(15)
             .fill(0)
             .map((_, index) => (
               <Skeleton key={index} h={28} mt="sm" animate={false} />
-            ))}
+            ))} */}
         </ScrollArea>
       </AppShell.Navbar>
       <AppShell.Main>
-        Main
-        <App />
+        {/* <App /> */}
 
       <ProductModal/>
       <ProductsGrid/>

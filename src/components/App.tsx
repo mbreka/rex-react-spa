@@ -1,7 +1,10 @@
-import React, { FC } from "react";
-import { products, login, me, refresh } from "@/api";
+import React, { FC, useContext } from "react";
+import { getProducts, postLogin, getMe, postRefresh } from "@/api";
+import { AppContext } from "@/providers/AppProvider";
 
 const App: FC = () => {
+  const { login } = useContext(AppContext)!;
+
   return (
     <div className="App">
       <img src={"/logo.svg"} alt="" srcSet="" />
@@ -10,12 +13,7 @@ const App: FC = () => {
       </a>
       <button
         onClick={async () => {
-          const x = await login();
-          const y = await me(x.accessToken);
-          const z = await refresh(x.refreshToken);
-          console.log(y);
-          console.log(y.age);
-          console.log(z);
+          login("","")
         }}
       >
         login

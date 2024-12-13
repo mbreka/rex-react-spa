@@ -1,40 +1,55 @@
 import React, { FC, useContext, useEffect, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Button, Text, Grid, Card, Image, Badge, Group, Pagination, Box, Center, MenuDropdown, NativeSelect } from "@mantine/core";
+import {
+  Modal,
+  Button,
+  Text,
+  Grid,
+  Card,
+  Image,
+  Badge,
+  Group,
+  Pagination,
+  Box,
+  Center,
+  MenuDropdown,
+  NativeSelect,
+  Input,
+  rem,
+  ActionIcon,
+  TextInput,
+} from "@mantine/core";
 import { AppContext } from "@/providers/AppProvider";
 import { getProducts } from "@/api";
 import { ProductI, ReviewI } from "@/types/interfaces";
+import { IconSearch } from '@tabler/icons-react';
 
-const ProductCard: FC<{ product: ProductI }> = ({
-  product,
-}) => {
-
-    const {
-        id,
-        title,
-        description,
-        category,
-        price,
-        discountPercentage,
-        rating,
-        stock,
-        tags,
-        brand,
-        sku,
-        weight,
-        dimensions: { width, height, depth },
-        warrantyInformation,
-        shippingInformation,
-        availabilityStatus,
-        reviews,
-        returnPolicy,
-        minimumOrderQuantity,
-        meta: { createdAt, updatedAt, barcode, qrCode },
-        images,
-        thumbnail,
-      } = product;
-    const { selected, setSelected } = useContext(AppContext)!;
-
+const ProductCard: FC<{ product: ProductI }> = ({ product }) => {
+  const {
+    id,
+    title,
+    description,
+    category,
+    price,
+    discountPercentage,
+    rating,
+    stock,
+    tags,
+    brand,
+    sku,
+    weight,
+    dimensions: { width, height, depth },
+    warrantyInformation,
+    shippingInformation,
+    availabilityStatus,
+    reviews,
+    returnPolicy,
+    minimumOrderQuantity,
+    meta: { createdAt, updatedAt, barcode, qrCode },
+    images,
+    thumbnail,
+  } = product;
+  const { selected, setSelected, totalProducts } = useContext(AppContext)!;
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <Card.Section>
@@ -50,9 +65,15 @@ const ProductCard: FC<{ product: ProductI }> = ({
         {description}
       </Text>
 
-      <Button color="blue" fullWidth mt="md" radius="md" onClick={()=>{
-        setSelected(product)
-      }}>
+      <Button
+        color="blue"
+        fullWidth
+        mt="md"
+        radius="md"
+        onClick={() => {
+          setSelected(product);
+        }}
+      >
         View details
       </Button>
     </Card>
@@ -60,20 +81,43 @@ const ProductCard: FC<{ product: ProductI }> = ({
 };
 
 const ProductsGrid: FC = () => {
-    const [limit, setLimit] = useState(5);
-    const [page, setPage] = useState(1);
-  const { selected, setSelected, products, queryProducts } = useContext(AppContext)!;
+  const [limit, setLimit] = useState(5);
+  const [page, setPage] = useState(1);
+  const { selected, setSelected, products, queryProducts, totalProducts } = useContext(AppContext)!;
 
   useEffect(() => {
-    queryProducts({limit,skip: (page-1)*limit});
+    queryProducts({ limit, skip: (page - 1) * limit });
   }, [limit, page]);
+
+  useEffect(() => {
+    console.log(totalProducts / page);
+    console.log({ totalProducts, productPerPage: page });
+    console.log(Math.ceil(totalProducts / page));
+  }, [page, totalProducts]);
+
 
   return (
     <>
-<NativeSelect value={limit} onChange={(e)=>{
-setLimit(Number(e.target.value))
-}} label="Show per page" description="Products shown per page" data={['5', '10', '20']} />
+    <Card>
 
+      {/* <Input.Wrapper label="Search" description="Input description"> */}
+        {/* <TextInput placeholder="Input component" styles={{section: { pointerEvents: 'none' }, root: {pointerEvents: 'none'}}} rightSection={} /> */}
+        {/* <Button>Search</Button> */}
+      {/* </Input.Wrapper> */}
+      <ActionIcon onClick={()=>{console.log("HI")}}>
+            <IconSearch onClick={()=>{console.log("HI")}} style={{ width: rem(16), height: rem(16) }} />
+        </ActionIcon>
+      <NativeSelect
+        value={limit}
+        onChange={(e) => {
+            setLimit(Number(e.target.value));
+        }}
+        label="Items per page"
+        description="Products shown per page"
+        data={["5", "10", "20"]}
+        />
+
+        </Card>
       <Grid
         gutter={10}
         type="container"
@@ -89,8 +133,7 @@ setLimit(Number(e.target.value))
           })}
       </Grid>
       <Center w={"100%"} p={20}>
-        
-      <Pagination value={page} onChange={(v)=>setPage(v)} total={10} />
+        <Pagination value={page} onChange={(v) => setPage(v)} total={Math.ceil(totalProducts / limit)} />
       </Center>
     </>
   );
