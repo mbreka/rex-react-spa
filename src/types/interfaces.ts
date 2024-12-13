@@ -3,6 +3,9 @@ export interface QueryI {
   limit?: number;
   delay?: number;
   select?: string;
+  sortBy?: string;
+  order?: string;
+  q?: string;
 }
 
 export interface ResponseBaseI {
