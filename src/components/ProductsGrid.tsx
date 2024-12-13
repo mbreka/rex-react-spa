@@ -18,11 +18,13 @@ import {
   rem,
   ActionIcon,
   TextInput,
+  Space,
 } from "@mantine/core";
 import { AppContext } from "@/providers/AppProvider";
 import { getProducts } from "@/api";
 import { ProductI, ReviewI } from "@/types/interfaces";
-import { IconSearch } from '@tabler/icons-react';
+import { IconChartFunnel, IconFilter, IconSearch, IconSort09, IconSort90 } from "@tabler/icons-react";
+import { CategoriesSelect } from "./CategoriesSelect";
 
 const ProductCard: FC<{ product: ProductI }> = ({ product }) => {
   const {
@@ -51,7 +53,7 @@ const ProductCard: FC<{ product: ProductI }> = ({ product }) => {
   } = product;
   const { selected, setSelected, totalProducts } = useContext(AppContext)!;
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder>
+    <Card shadow="sm" padding="lg" radius="md" withBorder style={{ height: "100%", justifyContent: "space-between" }}>
       <Card.Section>
         <Image src={thumbnail} height={160} alt="Norway" />
       </Card.Section>
@@ -62,7 +64,7 @@ const ProductCard: FC<{ product: ProductI }> = ({ product }) => {
       </Group>
 
       <Text size="sm" c="dimmed">
-        {description}
+        {description.substring(0, 100) + `${description.length > 99 ? "..." : ""}`}
       </Text>
 
       <Button
@@ -80,44 +82,106 @@ const ProductCard: FC<{ product: ProductI }> = ({ product }) => {
   );
 };
 
+const getSortOrderObjectFromString = (type: string): { sortBy: string; order: string } => {
+  const [s, o] = type.split(" ");
+  return {
+    sortBy: s.toLocaleLowerCase(),
+    order: o === "descending" ? "desc" : "asc",
+  };
+};
+
 const ProductsGrid: FC = () => {
-  const [limit, setLimit] = useState(5);
-  const [page, setPage] = useState(1);
+  const [filters, setFilters] = useState<boolean>(false);
+  const [limit, setLimit] = useState<number>(20);
+  const [sort, setSort] = useState<string>("Title ascending");
+  const [page, setPage] = useState<number>(1);
+  const [search, setSearch] = useState<string>("");
   const { selected, setSelected, products, queryProducts, totalProducts } = useContext(AppContext)!;
 
   useEffect(() => {
-    queryProducts({ limit, skip: (page - 1) * limit });
-  }, [limit, page]);
+    queryProducts({ limit, skip: (page - 1) * limit, q: search, ...getSortOrderObjectFromString(sort) });
+  }, [limit, page, sort]);
 
   useEffect(() => {
     console.log(totalProducts / page);
     console.log({ totalProducts, productPerPage: page });
     console.log(Math.ceil(totalProducts / page));
-  }, [page, totalProducts]);
-
+  }, [page, totalProducts, sort]);
 
   return (
     <>
-    <Card>
-
-      {/* <Input.Wrapper label="Search" description="Input description"> */}
+      <Card mb={rem(20)}>
+        {/* <Input.Wrapper label="Search" description="Input description"> */}
         {/* <TextInput placeholder="Input component" styles={{section: { pointerEvents: 'none' }, root: {pointerEvents: 'none'}}} rightSection={} /> */}
         {/* <Button>Search</Button> */}
-      {/* </Input.Wrapper> */}
-      <ActionIcon onClick={()=>{console.log("HI")}}>
-            <IconSearch onClick={()=>{console.log("HI")}} style={{ width: rem(16), height: rem(16) }} />
-        </ActionIcon>
-      <NativeSelect
-        value={limit}
-        onChange={(e) => {
-            setLimit(Number(e.target.value));
-        }}
-        label="Items per page"
-        description="Products shown per page"
-        data={["5", "10", "20"]}
-        />
+        {/* </Input.Wrapper> */}
+        <Center>
+          <Center display={"flex"} w={{ base: "100%", md: "50%" }}>
+            <TextInput
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              w={"100%"}
+              mr={rem(8)}
+            />
 
-        </Card>
+            <ActionIcon
+              onClick={() => {
+                setFilters(!filters);
+              }}
+              size={"lg"}
+              variant={filters ? "filled" : "light"}
+              mr={rem(4)}
+            >
+              <IconFilter style={{ width: rem(16), height: rem(16) }} />
+            </ActionIcon>
+            <ActionIcon
+              onClick={() => {
+                setPage(1);
+                queryProducts({ limit, q: search, ...getSortOrderObjectFromString(sort) });
+              }}
+              size={"lg"}
+            >
+              <IconSearch style={{ width: rem(16), height: rem(16) }} />
+            </ActionIcon>
+          </Center>
+        </Center>
+        <Center>
+          <Center w={{ base: "100%", md: "50%" }}>
+            {filters && (
+              <Card style={{ display: "flex", flexDirection: "row", gap: rem(20) }}>
+                <NativeSelect
+                  value={sort}
+                  onChange={(e) => {
+                    setSort(e.target.value);
+                  }}
+                  label="Sort by"
+                  description="Product placement"
+                  defaultValue={"Title ascending"}
+                  data={["Price ascending", "Price descending", "Title ascending", "Title descending"]}
+                />
+
+                <NativeSelect
+                  value={limit}
+                  onChange={(e) => {
+                    setLimit(Number(e.target.value));
+                  }}
+                  label="Items per page"
+                  description="Products shown per page"
+                  defaultValue={"20"}
+                  data={["10", "20", "40"]}
+                />
+
+                <CategoriesSelect />
+              </Card>
+            )}
+          </Center>
+        </Center>
+        <Center mt={rem(4)}>
+          <Text>Query returned {totalProducts} results.</Text>
+        </Center>
+      </Card>
       <Grid
         gutter={10}
         type="container"

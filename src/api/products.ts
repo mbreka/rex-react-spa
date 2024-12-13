@@ -5,7 +5,7 @@ import axios from "axios";
 
 const getProducts: (query?: QueryI) => Promise<ProductsResponseI> = async (query) => {
   const params = new URLSearchParams(query as Record<string, string>);
-  const response = await axios.get(`https://dummyjson.com/products${query ? "?" + params.toString() : ""}`);
+  const response = await axios.get(`https://dummyjson.com/products/search${query ? "?" + params.toString() : ""}`);
   const products: ProductsResponseI = response.data;
   return products;
 };
