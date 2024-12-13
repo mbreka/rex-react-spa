@@ -1,7 +1,7 @@
 import React, { FC, ReactNode, useEffect } from "react";
-import { getMe, getProducts, postLogin, postRefresh } from "@/api";
+import { getCategories, getMe, getProducts, getUsers, postLogin, postRefresh } from "@/api";
 import { ProductModal } from "@/components/ProductModal";
-import { LoginResponseI, ProductI, QueryI, UserI } from "@/types/interfaces";
+import { CategoryI, LoginResponseI, ProductI, QueryI, UserI } from "@/types/interfaces";
 import { useLocalStorage } from "@mantine/hooks";
 
 export type AppContextType = {
@@ -9,6 +9,8 @@ export type AppContextType = {
   selected: ProductI | undefined;
   cart: ProductI[];
   user: UserI | undefined;
+  users: UserI[];
+  categories: CategoryI[];
   totalProducts: number;
   loading: boolean;
   setSelected: (product: ProductI | undefined) => void;
@@ -33,9 +35,11 @@ const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) =>
 
   const [loading, setLoading] = React.useState<boolean>(true);
   const [products, setProducts] = React.useState<ProductI[]>([]);
+  const [categories, setCategories] = React.useState<CategoryI[]>([]);
   const [selected, setSelected] = React.useState<ProductI>();
   const [totalProducts, setTotalProducts] = React.useState<number>(0);
   const [user, setUser] = React.useState<UserI>();
+  const [users, setUsers] = React.useState<UserI[]>([]);
 
   const queryProducts = (query: QueryI | undefined) => {
     setLoading(true);
@@ -95,7 +99,25 @@ const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) =>
         setLoading(false);
       });
     });
-  }
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    getCategories()
+      .then((_categories) => {
+        setCategories(_categories);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+      getUsers().then((_users)=>{
+        setUsers(_users.users);
+        setLoading(false);
+      }).catch(()=>{
+        setLoading(false);
+      })
+  }, []);
 
   useEffect(() => {
     if (!auth) {
@@ -119,7 +141,9 @@ const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) =>
         selected,
         cart,
         user,
+        users,
         totalProducts,
+        categories,
         loading,
         setSelected,
         queryProducts,

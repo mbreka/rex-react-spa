@@ -6,6 +6,9 @@ import { App } from "./App";
 import { ProductModal } from "./ProductModal";
 import { ProductsGrid } from "./ProductsGrid";
 import { AppNavbar } from "./AppNavbar";
+import { Route, Routes } from "react-router";
+import { Login } from "./Login";
+import { Cart } from "./Cart";
 
 const AppLayout: FC = () => {
   const [opened, { toggle }] = useDisclosure();
@@ -37,8 +40,11 @@ const AppLayout: FC = () => {
         <AppShell.Main>
           {/* <App /> */}
 
-          <ProductModal />
-          <ProductsGrid />
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/cart" element={<Cart />} />
+          </Routes>
         </AppShell.Main>
       </AppShell>
     </Container>

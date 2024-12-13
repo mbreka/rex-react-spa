@@ -19,6 +19,7 @@ import {
   ActionIcon,
   TextInput,
   Space,
+  Stack,
 } from "@mantine/core";
 import { AppContext } from "@/providers/AppProvider";
 import { getProducts } from "@/api";
@@ -96,16 +97,24 @@ const ProductsGrid: FC = () => {
   const [sort, setSort] = useState<string>("Title ascending");
   const [page, setPage] = useState<number>(1);
   const [search, setSearch] = useState<string>("");
-  const { selected, setSelected, products, queryProducts, totalProducts } = useContext(AppContext)!;
+  const [filterCategories, setFilterCategories] = useState<string[]>([]);
+
+  const { selected, setSelected, products, queryProducts, totalProducts, categories } = useContext(AppContext)!;
 
   useEffect(() => {
-    queryProducts({ limit, skip: (page - 1) * limit, q: search, ...getSortOrderObjectFromString(sort) });
-  }, [limit, page, sort]);
+    queryProducts({
+      limit,
+      skip: (page - 1) * limit,
+      q: search,
+      ...getSortOrderObjectFromString(sort),
+      categories: filterCategories,
+    });
+  }, [limit, page, sort, filterCategories]);
 
   useEffect(() => {
-    console.log(totalProducts / page);
-    console.log({ totalProducts, productPerPage: page });
-    console.log(Math.ceil(totalProducts / page));
+    // console.log(totalProducts / page);
+    // console.log({ totalProducts, productPerPage: page });
+    // console.log(Math.ceil(totalProducts / page));
   }, [page, totalProducts, sort]);
 
   return (
@@ -121,6 +130,17 @@ const ProductsGrid: FC = () => {
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
+              }}
+              onKeyDownCapture={(e) => {
+                if (["Enter"].includes(e.key)) {
+                  e.preventDefault();
+                  setPage(1);
+                  queryProducts({
+                    limit,
+                    q: search,
+                    ...getSortOrderObjectFromString(sort),
+                  });
+                }
               }}
               w={"100%"}
               mr={rem(8)}
@@ -139,7 +159,11 @@ const ProductsGrid: FC = () => {
             <ActionIcon
               onClick={() => {
                 setPage(1);
-                queryProducts({ limit, q: search, ...getSortOrderObjectFromString(sort) });
+                queryProducts({
+                  limit,
+                  q: search,
+                  ...getSortOrderObjectFromString(sort),
+                });
               }}
               size={"lg"}
             >
@@ -150,30 +174,36 @@ const ProductsGrid: FC = () => {
         <Center>
           <Center w={{ base: "100%", md: "50%" }}>
             {filters && (
-              <Card style={{ display: "flex", flexDirection: "row", gap: rem(20) }}>
-                <NativeSelect
-                  value={sort}
-                  onChange={(e) => {
-                    setSort(e.target.value);
-                  }}
-                  label="Sort by"
-                  description="Product placement"
-                  defaultValue={"Title ascending"}
-                  data={["Price ascending", "Price descending", "Title ascending", "Title descending"]}
-                />
+              <Card>
+                <Stack>
+                  <CategoriesSelect
+                    categories={categories}
+                    onFilterChange={(v) => {
+                      setFilterCategories(v);
+                    }}
+                  />
+                  <Box style={{ display: "flex", flexDirection: "row", gap: rem(20) }}>
+                    <NativeSelect
+                      value={sort}
+                      onChange={(e) => {
+                        setSort(e.target.value);
+                      }}
+                      label="Sort by"
+                      description="Product placement"
+                      data={["Price ascending", "Price descending", "Title ascending", "Title descending"]}
+                    />
 
-                <NativeSelect
-                  value={limit}
-                  onChange={(e) => {
-                    setLimit(Number(e.target.value));
-                  }}
-                  label="Items per page"
-                  description="Products shown per page"
-                  defaultValue={"20"}
-                  data={["10", "20", "40"]}
-                />
-
-                <CategoriesSelect />
+                    <NativeSelect
+                      value={limit}
+                      onChange={(e) => {
+                        setLimit(Number(e.target.value));
+                      }}
+                      label="Items per page"
+                      description="Products shown per page"
+                      data={["10", "20", "40"]}
+                    />
+                  </Box>
+                </Stack>
               </Card>
             )}
           </Center>

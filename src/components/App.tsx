@@ -1,24 +1,13 @@
-import React, { FC, useContext } from "react";
-import { getProducts, postLogin, getMe, postRefresh } from "@/api";
-import { AppContext } from "@/providers/AppProvider";
+import React, { FC } from "react";
+import { ProductModal } from "./ProductModal";
+import { ProductsGrid } from "./ProductsGrid";
 
 const App: FC = () => {
-  const { login } = useContext(AppContext)!;
-
   return (
-    <div className="App">
-      <img src={"/logo.svg"} alt="" srcSet="" />
-      <a href="/" target="_blank" rel="noopener noreferrer">
-        learn react
-      </a>
-      <button
-        onClick={async () => {
-          login("","")
-        }}
-      >
-        login
-      </button>
-    </div>
+    <>
+      <ProductModal />
+      <ProductsGrid />
+    </>
   );
 };
 

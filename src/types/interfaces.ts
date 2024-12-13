@@ -5,6 +5,7 @@ export interface QueryI {
   select?: string;
   sortBy?: string;
   order?: string;
+  categories?: string[];
   q?: string;
 }
 
