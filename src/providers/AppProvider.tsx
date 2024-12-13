@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useEffect } from "react";
-import { getCategories, getMe, getProducts, postLogin, postRefresh } from "@/api";
+import { getCategories, getMe, getProducts, getUsers, postLogin, postRefresh } from "@/api";
 import { ProductModal } from "@/components/ProductModal";
 import { CategoryI, LoginResponseI, ProductI, QueryI, UserI } from "@/types/interfaces";
 import { useLocalStorage } from "@mantine/hooks";
@@ -9,6 +9,7 @@ export type AppContextType = {
   selected: ProductI | undefined;
   cart: ProductI[];
   user: UserI | undefined;
+  users: UserI[];
   categories: CategoryI[];
   totalProducts: number;
   loading: boolean;
@@ -38,6 +39,7 @@ const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) =>
   const [selected, setSelected] = React.useState<ProductI>();
   const [totalProducts, setTotalProducts] = React.useState<number>(0);
   const [user, setUser] = React.useState<UserI>();
+  const [users, setUsers] = React.useState<UserI[]>([]);
 
   const queryProducts = (query: QueryI | undefined) => {
     setLoading(true);
@@ -109,6 +111,12 @@ const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) =>
       .catch(() => {
         setLoading(false);
       });
+      getUsers().then((_users)=>{
+        setUsers(_users.users);
+        setLoading(false);
+      }).catch(()=>{
+        setLoading(false);
+      })
   }, []);
 
   useEffect(() => {
@@ -133,6 +141,7 @@ const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) =>
         selected,
         cart,
         user,
+        users,
         totalProducts,
         categories,
         loading,

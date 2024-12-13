@@ -11,11 +11,12 @@
     "lint": "eslint",
     "check": "tsc --noEmit",
     "format": "prettier \"./**/*.(js|jsx|ts|tsx|json|html|css)\" --write",
-    "clear": "rm -rf dist node_modules .parcel-cache coverage"
+    "clear": "rm -rf {dist,node_modules,.parcel-cache,coverage}"
   },
   "dependencies": {
     "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "react-dom": "^19.0.0",
+    "react-router": "^7.0.2"
   },
   "devDependencies": {
     "@babel/core": "7.26.0",

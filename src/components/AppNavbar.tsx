@@ -25,6 +25,7 @@ import {
 } from "@tabler/icons-react";
 import { FC, useState, useContext, useEffect } from "react";
 import { UserI } from "@/types/interfaces";
+import { useNavigate } from "react-router";
 
 const UserInfo: FC<{ user: UserI }> = ({
   user: {
@@ -59,8 +60,10 @@ const UserInfo: FC<{ user: UserI }> = ({
   },
 }) => {
   const { logout } = useContext(AppContext)!;
+  const navigate = useNavigate();
+
   return (
-    <Stack>
+    <>
       <Center>
         <img src={image} width={rem(16)} height={rem(16)} />
       </Center>
@@ -73,12 +76,10 @@ const UserInfo: FC<{ user: UserI }> = ({
         </Text>
       </Box>
       <Stack>
-        <Button
-          variant="light"
-          fullWidth
-          leftSection={<IconShoppingBag />}
-          // rightSection={<Badge variant="light">8</Badge>}
-        >
+        <Button variant="light" fullWidth leftSection={<IconShoppingBag />} onClick={() => navigate("/")}>
+          Home
+        </Button>
+        <Button variant="light" fullWidth leftSection={<IconShoppingBag />} onClick={() => navigate("/cart")}>
           Cart
         </Button>
         <Button
@@ -94,26 +95,31 @@ const UserInfo: FC<{ user: UserI }> = ({
         </Button>
       </Stack>
       {/* {JSON.stringify(user)} */}
-    </Stack>
+    </>
   );
 };
 
 const Guest: FC = () => {
-  const { login } = useContext(AppContext)!;
+  const navigate = useNavigate();
+
   return (
-    <Stack>
+    <>
+      <Button variant="light" fullWidth leftSection={<IconShoppingBag />} onClick={() => navigate("/")}>
+        Home
+      </Button>
+      <Button variant="light" fullWidth leftSection={<IconShoppingBag />} onClick={() => navigate("/cart")}>
+        Cart
+      </Button>
       <Button
         variant="light"
         fullWidth
         styles={{ root: { alignItems: "space-between" } }}
         leftSection={<IconLogout />}
-        onClick={() => {
-          login("", "");
-        }}
+        onClick={() => navigate("/login")}
       >
         Login
       </Button>
-    </Stack>
+    </>
   );
 };
 
@@ -121,7 +127,7 @@ const AppNavbar: FC = () => {
   const { user } = useContext(AppContext)!;
 
   return (
-    <>
+    <Stack>
       {user && <UserInfo user={user} />}
       {!user && <Guest />}
       <Space h={rem(50)} />
@@ -135,7 +141,7 @@ const AppNavbar: FC = () => {
       >
         Github Code
       </Button>
-    </>
+    </Stack>
   );
 };
 

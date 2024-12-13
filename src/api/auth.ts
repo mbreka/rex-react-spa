@@ -2,11 +2,11 @@
 import { LoginResponseI, MeResponseI, RefreshResponseI } from "@/types/interfaces";
 import axios from "axios";
 
-const postLogin: (user: string, pass: string) => Promise<LoginResponseI | undefined> = async () => {
+const postLogin: (user: string, pass: string) => Promise<LoginResponseI | undefined> = async (user, pass) => {
   try {
     const response = await axios.post("https://dummyjson.com/auth/login", {
-      username: "emilys",
-      password: "emilyspass",
+      username: user,
+      password: pass,
       expiresInMins: 30, // optional, defaults to 60
     });
     const login: LoginResponseI = response.data;
