@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "yarn@1.22.22",
-  "engines" : { 
-    "yarn" : "1.22.22",
-    "node" : ">=20.0.0"
+  "engines": {
+    "yarn": "1.22.22",
+    "node": ">=20.0.0"
   },
   "scripts": {
     "start": "parcel public/index.html",
@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.26.0",
-    "react-router": "7.0.2",
+    "@mantine/carousel": "7.15.1",
     "@babel/plugin-transform-flow-strip-types": "7.25.9",
     "@babel/plugin-transform-react-jsx": "7.25.9",
     "@babel/preset-env": "7.26.0",
@@ -45,6 +45,7 @@
     "babel-jest": "29.7.0",
     "buffer": "6.0.0",
     "dayjs": "1.11.13",
+    "embla-carousel-react": "8.5.1",
     "eslint": "8.0.1",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-jest": "28.9.0",
@@ -59,6 +60,7 @@
     "postcss-simple-vars": "7.0.1",
     "prettier": "3.4.2",
     "process": "0.11.10",
+    "react-router": "7.0.2",
     "svgo": "3",
     "ts-node": "10.9.2",
     "typescript": "5.7.2"

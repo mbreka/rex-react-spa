@@ -24,7 +24,16 @@ import {
 import { AppContext } from "@/providers/AppProvider";
 import { getProducts } from "@/api";
 import { ProductI, ReviewI } from "@/types/interfaces";
-import { IconChartFunnel, IconFilter, IconSearch, IconSort09, IconSort90 } from "@tabler/icons-react";
+import {
+  IconChartFunnel,
+  IconChevronDown,
+  IconChevronUp,
+  IconEye,
+  IconFilter,
+  IconSearch,
+  IconSort09,
+  IconSort90,
+} from "@tabler/icons-react";
 import { CategoriesSelect } from "./CategoriesSelect";
 
 const ProductCard: FC<{ product: ProductI }> = ({ product }) => {
@@ -52,33 +61,69 @@ const ProductCard: FC<{ product: ProductI }> = ({ product }) => {
     images,
     thumbnail,
   } = product;
-  const { selected, setSelected, totalProducts } = useContext(AppContext)!;
+  const { selected, setSelected, totalProducts, cart } = useContext(AppContext)!;
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder style={{ height: "100%", justifyContent: "space-between" }}>
-      <Card.Section>
-        <Image src={thumbnail} height={160} alt="Norway" />
+    <Card  shadow="sm" padding="lg" radius="md" withBorder style={{ height: "100%", justifyContent: "space-between" }}>
+      <Card.Section  onClick={() => {
+            setSelected(product);
+          }}>
+        <Image src={thumbnail} height={160} alt={"Image of " + title} />
       </Card.Section>
 
-      <Group justify="space-between" mt="md" mb="xs">
+      <Group  onClick={() => {
+            setSelected(product);
+          }} justify="space-between" mt="md" mb="xs">
         <Text fw={500}>{title}</Text>
-        {discountPercentage > 0 && <Badge color="pink">On Sale</Badge>}
+      </Group>
+      <Group justify="space-between" mt="md" mb="xs">
+        <Text fw={500}>{price}$</Text>
+        {discountPercentage > 0 && <Badge color="pink">-{discountPercentage}%</Badge>}
       </Group>
 
-      <Text size="sm" c="dimmed">
+      <Text  onClick={() => {
+            setSelected(product);
+          }} size="sm" c="dimmed">
         {description.substring(0, 100) + `${description.length > 99 ? "..." : ""}`}
       </Text>
 
-      <Button
-        color="blue"
-        fullWidth
-        mt="md"
-        radius="md"
-        onClick={() => {
-          setSelected(product);
-        }}
+      <Box
+        mt={rem(20)}
+        w={"100%"}
+        style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
       >
-        View details
-      </Button>
+
+        <ActionIcon
+          color="blue"
+          radius="md"
+          onClick={() => {
+            setSelected(product);
+          }}
+        >
+          <IconEye />
+        </ActionIcon>
+
+        <ActionIcon.Group>
+          <ActionIcon
+            variant="default"
+            size="md"
+            radius="md"
+            // onClick={decrement}
+          >
+            <IconChevronDown color="var(--mantine-color-red-text)" />
+          </ActionIcon>
+          <ActionIcon.GroupSection variant="default" size="md" bg="var(--mantine-color-body)" miw={60}>
+            {/* {value} */}0
+          </ActionIcon.GroupSection>
+          <ActionIcon
+            variant="default"
+            size="md"
+            radius="md"
+            // onClick={increment}
+          >
+            <IconChevronUp color="var(--mantine-color-teal-text)" />
+          </ActionIcon>
+        </ActionIcon.Group>
+      </Box>
     </Card>
   );
 };
@@ -102,6 +147,7 @@ const ProductsGrid: FC = () => {
   const { selected, setSelected, products, queryProducts, totalProducts, categories } = useContext(AppContext)!;
 
   useEffect(() => {
+    console.log({});
     queryProducts({
       limit,
       skip: (page - 1) * limit,

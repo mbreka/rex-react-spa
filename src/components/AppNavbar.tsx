@@ -14,6 +14,7 @@ import {
   Button,
   Badge,
   Space,
+  Image
 } from "@mantine/core";
 import {
   IconBrandGithub,
@@ -65,7 +66,7 @@ const UserInfo: FC<{ user: UserI }> = ({
   return (
     <>
       <Center>
-        <img src={image} width={rem(16)} height={rem(16)} />
+        <Image src={image} width={rem(16)} height={rem(16)} />
       </Center>
       <Box>
         <Text fw={700} size={rem(20)}>
