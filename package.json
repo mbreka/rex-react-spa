@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "yarn@1.22.22",
+  "engines" : { 
+    "yarn" : "1.22.22",
+    "node" : ">=20.0.0"
+  },
   "scripts": {
     "start": "parcel public/index.html",
     "build": "parcel build public/index.html",
