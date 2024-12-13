@@ -1,9 +1,10 @@
 import React, { FC, useContext } from "react";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Button, Text } from "@mantine/core";
+import { Modal, Button, Text, Image } from "@mantine/core";
 import { AppContext } from "@/providers/AppProvider";
 import { getProducts } from "@/api";
 import { ProductI, ReviewI } from "@/types/interfaces";
+import { Carousel } from "@mantine/carousel";
 
 const ReviewCard: FC<{ review: ReviewI }> = ({ review: { rating, comment, date, reviewerName, reviewerEmail } }) => {
   return (
@@ -48,7 +49,7 @@ const ProductDetails: FC<{ product: ProductI }> = ({
       <Text>{title}</Text>
       <Text>{description}</Text>
       <Text>{category}</Text>
-      <Text>{price}</Text>
+      <Text>{price}$</Text>
       <Text>{discountPercentage}</Text>
       <Text>{rating}</Text>
       <Text>{stock}</Text>
@@ -61,13 +62,22 @@ const ProductDetails: FC<{ product: ProductI }> = ({
       <Text>{availabilityStatus}</Text>
       <Text>{returnPolicy}</Text>
       <Text>{minimumOrderQuantity}</Text>
+
+
+      <Carousel withIndicators height={"auto"}>
+        {images.map((src, index) => {
+          return (
+            <Carousel.Slide>
+              <Image key={index} src={src} />;
+            </Carousel.Slide>
+          );
+        })}
+      </Carousel>
+
+
       {reviews.map((review, index) => {
         return <ReviewCard key={index} review={review} />;
       })}
-      {images.map((src, index) => {
-        return <img key={index} src={src} />;
-      })}
-      <img src={thumbnail} alt={[title, "thumbnail"].join(" ")} />
     </>
   );
 };

@@ -1,6 +1,6 @@
 import React, { FC, useContext, useState } from "react";
 import { AppContext } from "@/providers/AppProvider";
-import { Box, Button, Center, TextInput, rem, Text, Card, SimpleGrid } from "@mantine/core";
+import { Box, Button, Center, Image, TextInput, rem, Text, Card, SimpleGrid } from "@mantine/core";
 import { useNavigate } from "react-router";
 
 const Login: FC = () => {
@@ -74,7 +74,7 @@ const Login: FC = () => {
             >
               {" "}
               <Center>
-                <img src={image} width={rem(16)} height={rem(16)} />
+                <Image src={image} width={rem(16)} height={rem(16)} />
               </Center>
               <Box>
                 <Text fw={700} size={rem(20)}>

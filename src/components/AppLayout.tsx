@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { AppShell, Burger, Group, Skeleton, Box, Text, ScrollArea, Container } from "@mantine/core";
+import { AppShell, Burger, Group, Image, Skeleton, Box, Text, ScrollArea, Container } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import logo from "../../public/logo.svg";
 import { App } from "./App";
@@ -24,7 +24,7 @@ const AppLayout: FC = () => {
           <Group h="100%" px="md" justify="space-between">
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
             <Text fw={900}>REX</Text>
-            <img src={logo} height={60} />
+            <Image src={logo} height={60} />
           </Group>
         </AppShell.Header>
         <AppShell.Navbar p="md" h={"100%"} style={{ overflowY: "scroll" }}>
