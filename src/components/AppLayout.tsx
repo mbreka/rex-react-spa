@@ -24,7 +24,7 @@ const AppLayout: FC = () => {
           <Group h="100%" px="md" justify="space-between">
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
             <Text fw={900}>REX</Text>
-            <Image src={logo} height={60} />
+            <Image src={logo} h={60} w={60} />
           </Group>
         </AppShell.Header>
         <AppShell.Navbar p="md" h={"100%"} style={{ overflowY: "scroll" }}>

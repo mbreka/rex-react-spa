@@ -8,7 +8,7 @@ const GlobalProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children })
   return (
     <MantineProvider theme={theme}>
       <BrowserRouter>
-      <AppProvider>{children}</AppProvider>
+        <AppProvider>{children}</AppProvider>
       </BrowserRouter>
     </MantineProvider>
   );

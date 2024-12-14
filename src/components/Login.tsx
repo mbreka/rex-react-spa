@@ -64,6 +64,7 @@ const Login: FC = () => {
             role,
           }) => (
             <Card
+              key={username}
               shadow="xs"
               style={{ cursor: "pointer" }}
               role="button"
@@ -73,8 +74,8 @@ const Login: FC = () => {
               }}
             >
               {" "}
-              <Center>
-                <Image src={image} width={rem(16)} height={rem(16)} />
+              <Center my={20}>
+                <Image src={image} w={64} h={64} />
               </Center>
               <Box>
                 <Text fw={700} size={rem(20)}>

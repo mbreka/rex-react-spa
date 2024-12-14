@@ -4,7 +4,7 @@ import { GlobalProvider } from "./providers";
 import { App } from "@/components/App";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
-import '@mantine/carousel/styles.css';
+import "@mantine/carousel/styles.css";
 import "./index.css";
 import { AppLayout } from "./components/AppLayout";
 
