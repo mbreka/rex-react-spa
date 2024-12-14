@@ -63,17 +63,15 @@ const ProductDetails: FC<{ product: ProductI }> = ({
       <Text>{returnPolicy}</Text>
       <Text>{minimumOrderQuantity}</Text>
 
-
       <Carousel withIndicators height={"auto"}>
         {images.map((src, index) => {
           return (
-            <Carousel.Slide>
+            <Carousel.Slide key={src}>
               <Image key={index} src={src} />;
             </Carousel.Slide>
           );
         })}
       </Carousel>
-
 
       {reviews.map((review, index) => {
         return <ReviewCard key={index} review={review} />;

@@ -1,22 +1,23 @@
 import React, { FC, ReactNode, useEffect } from "react";
 import { getCategories, getMe, getProducts, getUsers, postLogin, postRefresh } from "@/api";
 import { ProductModal } from "@/components/ProductModal";
-import { CategoryI, LoginResponseI, ProductI, QueryI, UserI } from "@/types/interfaces";
+import { CartMeta, CategoryI, LoginResponseI, ProductI, QueryI, UserI } from "@/types/interfaces";
 import { useLocalStorage } from "@mantine/hooks";
 
 export type AppContextType = {
   products: ProductI[];
   selected: ProductI | undefined;
-  cart: ProductI[];
+  cart: CartMeta<ProductI>[];
   user: UserI | undefined;
   users: UserI[];
   categories: CategoryI[];
   totalProducts: number;
   loading: boolean;
+  getProductCartMeta: (product: ProductI) => CartMeta<ProductI>;
   setSelected: (product: ProductI | undefined) => void;
   queryProducts: (query: QueryI) => void;
-  addProductToCart: (product: ProductI) => void;
-  removeProductFromCart: (product: ProductI) => void;
+  addProductToCart: (product: CartMeta<ProductI>) => void;
+  removeProductFromCart: (product: CartMeta<ProductI>) => void;
   login: (user: string, pass: string) => void;
   logout: () => void;
 };
@@ -28,9 +29,17 @@ const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) =>
     key: "auth",
     defaultValue: undefined,
   });
-  const [cart, setCart] = useLocalStorage<ProductI[]>({
+  const [cart, setCart] = useLocalStorage<{ [key: string]: CartMeta<ProductI>[] }>({
     key: "cart",
-    defaultValue: [],
+    defaultValue: {},
+    // serialize: (value) => {
+    //   /* return value serialized to string */
+    //   return JSON.stringify(value);
+    // },
+    // deserialize: (localStorageValue) => {
+    //   /* parse localStorage string value and return value */
+    //   return new Map(JSON.parse(localStorageValue||"") as unknown)
+    // },
   });
 
   const [loading, setLoading] = React.useState<boolean>(true);
@@ -40,6 +49,8 @@ const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) =>
   const [totalProducts, setTotalProducts] = React.useState<number>(0);
   const [user, setUser] = React.useState<UserI>();
   const [users, setUsers] = React.useState<UserI[]>([]);
+  const [userCart, setUserCart] = React.useState<CartMeta<ProductI>[]>([]);
+  const [storagekey, setStoragekey] = React.useState<string>("guest");
 
   const queryProducts = (query: QueryI | undefined) => {
     setLoading(true);
@@ -53,11 +64,41 @@ const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) =>
         setLoading(false);
       });
   };
-  const addProductToCart = (product: ProductI) => {
-    setCart((prevCart) => [...prevCart, product]);
+  const addProductToCart = (product: CartMeta<ProductI>) => {
+    const storageExist = cart[storagekey];
+    if (storageExist) {
+      const oldcart = cart[storagekey]!.filter(({ item: _p }) => _p.id !== product.item.id)!;
+      if (!product.quantity) {
+        product.quantity = 1;
+      } else {
+        product.quantity += 1;
+      }
+      setCart({ ...cart, [storagekey]: [...oldcart, product] });
+    } else {
+      setCart({ ...cart, [storagekey]: [product] });
+    }
   };
-  const removeProductFromCart = (product: ProductI) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== product.id));
+
+  const removeProductFromCart = (product: CartMeta<ProductI>) => {
+    const storageExist = cart[storagekey];
+    if (storageExist) {
+      const oldcart = cart[storagekey]!.filter(({ item: _p }) => _p.id !== product.item.id)!;
+      if (product.quantity < 1) {
+        product.quantity = 0;
+      } else {
+        product.quantity -= 1;
+      }
+      setCart({ ...cart, [storagekey]: [...oldcart, product] });
+    }
+  };
+  const getProductCartMeta = (product: ProductI): CartMeta<ProductI> => {
+    const cartMeta: CartMeta<ProductI> =
+      cart[storagekey]?.find((cm) => cm.item.id === product.id) ||
+      ({
+        item: product,
+        quantity: 0,
+      } as CartMeta<ProductI>);
+    return cartMeta;
   };
   const login = (user: string, pass: string) => {
     setLoading(true);
@@ -111,13 +152,25 @@ const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) =>
       .catch(() => {
         setLoading(false);
       });
-      getUsers().then((_users)=>{
+    getUsers()
+      .then((_users) => {
         setUsers(_users.users);
         setLoading(false);
-      }).catch(()=>{
-        setLoading(false);
       })
+      .catch(() => {
+        setLoading(false);
+      });
   }, []);
+
+  useEffect(() => {
+    setUserCart(cart[storagekey]!);
+  }, [cart]);
+
+  useEffect(() => {
+    const sk = auth?.username || "guest";
+    setStoragekey(sk);
+    setUserCart(cart[sk]!);
+  }, [auth]);
 
   useEffect(() => {
     if (!auth) {
@@ -139,12 +192,13 @@ const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) =>
       value={{
         products,
         selected,
-        cart,
+        cart: userCart,
         user,
         users,
         totalProducts,
         categories,
         loading,
+        getProductCartMeta,
         setSelected,
         queryProducts,
         addProductToCart,

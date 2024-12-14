@@ -14,7 +14,7 @@ import {
   Button,
   Badge,
   Space,
-  Image
+  Image,
 } from "@mantine/core";
 import {
   IconBrandGithub,
@@ -64,9 +64,9 @@ const UserInfo: FC<{ user: UserI }> = ({
   const navigate = useNavigate();
 
   return (
-    <>
-      <Center>
-        <Image src={image} width={rem(16)} height={rem(16)} />
+    <Stack>
+      <Center h={rem(100)}>
+        <Image src={image} w={64} h={64} />
       </Center>
       <Box>
         <Text fw={700} size={rem(20)}>
@@ -96,7 +96,7 @@ const UserInfo: FC<{ user: UserI }> = ({
         </Button>
       </Stack>
       {/* {JSON.stringify(user)} */}
-    </>
+    </Stack>
   );
 };
 

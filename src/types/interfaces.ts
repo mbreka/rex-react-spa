@@ -239,3 +239,12 @@ export interface RefreshResponseI {
   accessToken: string;
   refreshToken: string;
 }
+
+/* * * * * * * * * * * * * * * * * * * * *
+ *                   CART                *
+ * * * * * * * * * * * * * * * * * * * * */
+
+export interface CartMeta<T> {
+  item: T;
+  quantity: number;
+}

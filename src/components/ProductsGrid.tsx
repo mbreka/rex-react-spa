@@ -23,7 +23,7 @@ import {
 } from "@mantine/core";
 import { AppContext } from "@/providers/AppProvider";
 import { getProducts } from "@/api";
-import { ProductI, ReviewI } from "@/types/interfaces";
+import { CartMeta, ProductI, ReviewI } from "@/types/interfaces";
 import {
   IconChartFunnel,
   IconChevronDown,
@@ -61,18 +61,33 @@ const ProductCard: FC<{ product: ProductI }> = ({ product }) => {
     images,
     thumbnail,
   } = product;
-  const { selected, setSelected, totalProducts, cart } = useContext(AppContext)!;
+  const { selected, setSelected, totalProducts, cart, getProductCartMeta, removeProductFromCart, addProductToCart } =
+    useContext(AppContext)!;
+  const [productMeta, setProductMeta] = useState<CartMeta<ProductI>>();
+  useEffect(() => {
+    // console.log({ productMeta });
+
+    setProductMeta(getProductCartMeta(product));
+  }, [product, cart]);
+
   return (
-    <Card  shadow="sm" padding="lg" radius="md" withBorder style={{ height: "100%", justifyContent: "space-between" }}>
-      <Card.Section  onClick={() => {
-            setSelected(product);
-          }}>
-        <Image src={thumbnail} height={160} alt={"Image of " + title} />
+    <Card shadow="sm" padding="lg" radius="md" withBorder style={{ height: "100%", justifyContent: "space-between" }}>
+      <Card.Section
+        onClick={() => {
+          setSelected(product);
+        }}
+      >
+        <Image src={thumbnail} h={160} alt={"Image of " + title} />
       </Card.Section>
 
-      <Group  onClick={() => {
-            setSelected(product);
-          }} justify="space-between" mt="md" mb="xs">
+      <Group
+        onClick={() => {
+          setSelected(product);
+        }}
+        justify="space-between"
+        mt="md"
+        mb="xs"
+      >
         <Text fw={500}>{title}</Text>
       </Group>
       <Group justify="space-between" mt="md" mb="xs">
@@ -80,9 +95,13 @@ const ProductCard: FC<{ product: ProductI }> = ({ product }) => {
         {discountPercentage > 0 && <Badge color="pink">-{discountPercentage}%</Badge>}
       </Group>
 
-      <Text  onClick={() => {
-            setSelected(product);
-          }} size="sm" c="dimmed">
+      <Text
+        onClick={() => {
+          setSelected(product);
+        }}
+        size="sm"
+        c="dimmed"
+      >
         {description.substring(0, 100) + `${description.length > 99 ? "..." : ""}`}
       </Text>
 
@@ -91,7 +110,6 @@ const ProductCard: FC<{ product: ProductI }> = ({ product }) => {
         w={"100%"}
         style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
       >
-
         <ActionIcon
           color="blue"
           radius="md"
@@ -107,18 +125,29 @@ const ProductCard: FC<{ product: ProductI }> = ({ product }) => {
             variant="default"
             size="md"
             radius="md"
-            // onClick={decrement}
+            onClick={() => {
+              if (!productMeta) {
+                return;
+              }
+              removeProductFromCart(productMeta);
+            }}
           >
             <IconChevronDown color="var(--mantine-color-red-text)" />
           </ActionIcon>
           <ActionIcon.GroupSection variant="default" size="md" bg="var(--mantine-color-body)" miw={60}>
-            {/* {value} */}0
+            {/* {value} */}
+            {productMeta?.quantity || 0}
           </ActionIcon.GroupSection>
           <ActionIcon
             variant="default"
             size="md"
             radius="md"
-            // onClick={increment}
+            onClick={() => {
+              if (!productMeta) {
+                return;
+              }
+              addProductToCart(productMeta);
+            }}
           >
             <IconChevronUp color="var(--mantine-color-teal-text)" />
           </ActionIcon>
@@ -147,7 +176,6 @@ const ProductsGrid: FC = () => {
   const { selected, setSelected, products, queryProducts, totalProducts, categories } = useContext(AppContext)!;
 
   useEffect(() => {
-    console.log({});
     queryProducts({
       limit,
       skip: (page - 1) * limit,
