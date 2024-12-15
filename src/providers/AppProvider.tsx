@@ -66,12 +66,17 @@ const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) =>
   const addProductToCart = (product: CartMeta<ProductI>) => {
     const storageExist = cart[storagekey];
     if (storageExist) {
-      const updatedCart = cart[storagekey]!.map((ce) =>
-        ce.item.id !== product.item.id
-          ? ce
-          : { ...ce, quantity: !ce.quantity || ce.quantity === 0 ? 1 : ce.quantity + 1 },
-      )!;
-      setCart({ ...cart, [storagekey]: updatedCart });
+      const existing = cart[storagekey]!.find((ce) => ce.item.id === product.item.id);
+      if (existing) {
+        const updatedCart = cart[storagekey]!.map((ce) =>
+          ce.item.id !== product.item.id
+            ? ce
+            : { ...ce, quantity: !ce.quantity || ce.quantity === 0 ? 1 : ce.quantity + 1 },
+        )!;
+        setCart({ ...cart, [storagekey]: updatedCart });
+      } else {
+        setCart({ ...cart, [storagekey]: [...cart[storagekey], {...product, quantity: 1}] });
+      }
     } else {
       setCart({ ...cart, [storagekey]: [product] });
     }
