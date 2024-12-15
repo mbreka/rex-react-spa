@@ -1,6 +1,5 @@
-import React, { FC, ReactNode, useEffect } from "react";
+import React, { FC, ReactNode, createContext, useEffect, useState } from "react";
 import { getCategories, getMe, getProducts, getUsers, postLogin, postRefresh } from "@/api";
-import { ProductModal } from "@/components/ProductModal";
 import { CartMeta, CategoryI, LoginResponseI, ProductI, QueryI, UserI } from "@/types/interfaces";
 import { useLocalStorage } from "@mantine/hooks";
 
@@ -22,7 +21,7 @@ export type AppContextType = {
   logout: () => void;
 };
 
-export const AppContext = React.createContext<AppContextType | null>(null);
+export const AppContext = createContext<AppContextType | null>(null);
 
 const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
   const [auth, setAuth] = useLocalStorage<LoginResponseI | undefined>({
@@ -42,15 +41,15 @@ const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) =>
     // },
   });
 
-  const [loading, setLoading] = React.useState<boolean>(true);
-  const [products, setProducts] = React.useState<ProductI[]>([]);
-  const [categories, setCategories] = React.useState<CategoryI[]>([]);
-  const [selected, setSelected] = React.useState<ProductI>();
-  const [totalProducts, setTotalProducts] = React.useState<number>(0);
-  const [user, setUser] = React.useState<UserI>();
-  const [users, setUsers] = React.useState<UserI[]>([]);
-  const [userCart, setUserCart] = React.useState<CartMeta<ProductI>[]>([]);
-  const [storagekey, setStoragekey] = React.useState<string>("guest");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [products, setProducts] = useState<ProductI[]>([]);
+  const [categories, setCategories] = useState<CategoryI[]>([]);
+  const [selected, setSelected] = useState<ProductI>();
+  const [totalProducts, setTotalProducts] = useState<number>(0);
+  const [user, setUser] = useState<UserI>();
+  const [users, setUsers] = useState<UserI[]>([]);
+  const [userCart, setUserCart] = useState<CartMeta<ProductI>[]>([]);
+  const [storagekey, setStoragekey] = useState<string>("guest");
 
   const queryProducts = (query: QueryI | undefined) => {
     setLoading(true);
@@ -67,13 +66,12 @@ const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) =>
   const addProductToCart = (product: CartMeta<ProductI>) => {
     const storageExist = cart[storagekey];
     if (storageExist) {
-      const oldcart = cart[storagekey]!.filter(({ item: _p }) => _p.id !== product.item.id)!;
-      if (!product.quantity) {
-        product.quantity = 1;
-      } else {
-        product.quantity += 1;
-      }
-      setCart({ ...cart, [storagekey]: [...oldcart, product] });
+      const updatedCart = cart[storagekey]!.map((ce) =>
+        ce.item.id !== product.item.id
+          ? ce
+          : { ...ce, quantity: !ce.quantity || ce.quantity === 0 ? 1 : ce.quantity + 1 },
+      )!;
+      setCart({ ...cart, [storagekey]: updatedCart });
     } else {
       setCart({ ...cart, [storagekey]: [product] });
     }
@@ -82,13 +80,10 @@ const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) =>
   const removeProductFromCart = (product: CartMeta<ProductI>) => {
     const storageExist = cart[storagekey];
     if (storageExist) {
-      const oldcart = cart[storagekey]!.filter(({ item: _p }) => _p.id !== product.item.id)!;
-      if (product.quantity < 1) {
-        product.quantity = 0;
-      } else {
-        product.quantity -= 1;
-      }
-      setCart({ ...cart, [storagekey]: [...oldcart, product] });
+      const updatedCart = cart[storagekey]!.map((ce) =>
+        ce.item.id !== product.item.id ? ce : { ...ce, quantity: ce.quantity < 1 ? 0 : ce.quantity - 1 },
+      )!;
+      setCart({ ...cart, [storagekey]: updatedCart });
     }
   };
   const getProductCartMeta = (product: ProductI): CartMeta<ProductI> => {
