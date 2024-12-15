@@ -4,13 +4,14 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import { App } from "../../src/components/App";
+import { renderWithProviders } from "../renderWithProviders";
 
 test("loads and displays app", async () => {
   // ARRANGE
-  render(<App />);
+  renderWithProviders(<App />, { providerProps: { } });
 
   // ACT
-  await userEvent.click(screen.getByText("learn react"));
+  await userEvent.click(screen.getByText("Search products:"));
   // await screen.findByRole('heading')
 
   // ASSERT
