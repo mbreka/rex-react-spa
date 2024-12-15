@@ -1,6 +1,6 @@
 import React, { FC, useContext, useEffect, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Button, Text, Image, ActionIcon, Badge, Box, Card, Group, rem } from "@mantine/core";
+import { Modal, Button, Text, Image, ActionIcon, Badge, Box, Card, Group, rem, Table, Rating } from "@mantine/core";
 import { AppContext } from "@/providers/AppProvider";
 import { getProducts } from "@/api";
 import { CartMeta, ProductI, ReviewI } from "@/types/interfaces";
@@ -57,34 +57,27 @@ const ProductDetails: FC<{ product: ProductI }> = ({ product }) => {
 
   return (
     <>
-      <Card shadow="sm" padding="lg" radius="md" withBorder style={{ height: "100%", justifyContent: "space-between" }}>
-        <Card.Section>
-          <Carousel withIndicators height={"auto"}>
-            {images.map((src, index) => {
-              return (
-                <Carousel.Slide key={src}>
-                  <Image key={index} src={src} />;
-                </Carousel.Slide>
-              );
-            })}
-          </Carousel>
-        </Card.Section>
+      <Box style={{ height: "100%", justifyContent: "space-between" }}>
+        <Carousel withIndicators height={"auto"}>
+          {images.map((src, index) => {
+            return (
+              <Carousel.Slide key={src}>
+                <Image key={index} src={src} />;
+              </Carousel.Slide>
+            );
+          })}
+        </Carousel>
 
-        <Group
-          onClick={() => {
-            setSelected(product);
-          }}
-          justify="space-between"
-          mt="md"
-          mb="xs"
-        >
-          <Text fw={500}>{title}</Text>
-        </Group>
         <Group justify="space-between" mt="md" mb="xs">
-          <Text size="xl" fw={500}>{price}$</Text>
+          <Text size="xl" fw={700}>
+            {price}$
+          </Text>
           {discountPercentage > 0 && <Badge color="pink">-{discountPercentage}%</Badge>}
         </Group>
 
+        <Group justify="space-between" mt="md" mb="xs">
+       
+        </Group>
         <Text
           onClick={() => {
             setSelected(product);
@@ -94,22 +87,8 @@ const ProductDetails: FC<{ product: ProductI }> = ({ product }) => {
         >
           {description}
         </Text>
-
-        <Box
-          mt={rem(20)}
-          w={"100%"}
-          style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
-        >
-          {/* <ActionIcon
-            color="blue"
-            radius="md"
-            onClick={() => {
-              setSelected(product);
-            }}
-          >
-            <IconEye />
-          </ActionIcon> */}
-
+        <Group justify="space-between" my="xl" mb="xs">
+        <Rating value={rating} size={"lg"} />
           <ActionIcon.Group>
             <ActionIcon
               variant="default"
@@ -142,35 +121,94 @@ const ProductDetails: FC<{ product: ProductI }> = ({ product }) => {
               <IconChevronUp color="var(--mantine-color-teal-text)" />
             </ActionIcon>
           </ActionIcon.Group>
+        </Group>
 
-          <Group justify="space-between" mt="md" mb="xs">
-            <Box></Box>
-            <Box></Box>
-          </Group>
-          {/* <Box>
-            <Text>{title}</Text>
-            <Text>{description}</Text>
-            <Text>{category}</Text>
-            <Text>{price}$</Text>
-            <Text>{discountPercentage}</Text>
-            <Text>{rating}</Text>
-            <Text>{stock}</Text>
-            <Text>{tags}</Text>
-            <Text>{brand}</Text>
-            <Text>{sku}</Text>
-            <Text>{weight}</Text>
-            <Text>{warrantyInformation}</Text>
-            <Text>{shippingInformation}</Text>
-            <Text>{availabilityStatus}</Text>
-            <Text>{returnPolicy}</Text>
-            <Text>{minimumOrderQuantity}</Text>
-          </Box>
+        <Group justify="space-between" mt="md" mb="xs">
+          <Text size="lg" fw={500}>Details</Text>
+          <Table>
+            <Table.Tbody>
+              <Table.Tr>
+                <Table.Td>Category</Table.Td>
+                <Table.Td>{category}</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Rating</Table.Td>
+                <Table.Td>{rating}</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Stock</Table.Td>
+                <Table.Td>{stock}</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Tags</Table.Td>
+                <Table.Td>{tags.join(", ")}</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Brand</Table.Td>
+                <Table.Td>{brand}</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>SKU</Table.Td>
+                <Table.Td>{sku}</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Weight</Table.Td>
+                <Table.Td>{weight}</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Warranty Information</Table.Td>
+                <Table.Td>{warrantyInformation}</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Shipping Information</Table.Td>
+                <Table.Td>{shippingInformation}</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Availability Status</Table.Td>
+                <Table.Td>{availabilityStatus}</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Return Policy</Table.Td>
+                <Table.Td>{returnPolicy}</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Minimum Order Quantity</Table.Td>
+                <Table.Td>{minimumOrderQuantity}</Table.Td>
+              </Table.Tr>
+            </Table.Tbody>
+          </Table>
+        </Group>
+        <Group justify="space-between" mt="md" mb="xs">
+          <Text size="lg" fw={500}>Dimensions</Text>
+          <Table>
+            <Table.Tbody>
+              <Table.Tr>
+                <Table.Td>Width</Table.Td>
+                <Table.Td>{width} m</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Height</Table.Td>
+                <Table.Td>{height} m</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Depth</Table.Td>
+                <Table.Td>{depth} m</Table.Td>
+              </Table.Tr>
+            </Table.Tbody>
+          </Table>
+        </Group>
 
+        <Box
+          mt={rem(20)}
+          w={"100%"}
+          style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
+        >
+          {/* 
           {reviews.map((review, index) => {
             return <ReviewCard key={index} review={review} />;
           })} */}
         </Box>
-      </Card>
+      </Box>
     </>
   );
 };
@@ -180,7 +218,7 @@ const ProductModal: FC = () => {
 
   return (
     <>
-      <Modal opened={!!selected} size={"xl"} onClose={() => setSelected(undefined)} title="Product Description">
+      <Modal opened={!!selected} size={"xl"} onClose={() => setSelected(undefined)} title={selected?.title}>
         {!!selected && <ProductDetails product={selected} />}
       </Modal>
 
