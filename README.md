@@ -1,50 +1,106 @@
-# Rex 
-# Getting Started with Create React App
+# Getting Started with REX SPA
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is demonstrational single page app made in React and Typescript from scratch, that uses [dummy json](https://dummyjson.com/) service as a backend.
+
+## Requirements
+
+- [Node](https://nodejs.org/en) version 20 or higher
+- [Yarn](https://yarnpkg.com/) recommended version 1.22
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `npm start`
+### `yarn run start`
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Open [http://localhost:1234](http://localhost:1234) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
-### `npm test`
+### `yarn run build`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
+Builds the app for production to the `dist` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### `yarn run test`
 
-### `npm run eject`
+Launches the test runner in the interactive watch mode.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### `yarn run coverage`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Launches the test runner and generates a coverage report in the `coverage` folder.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### `yarn run lint`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Analyzes Typescript code for potential errors and style inconsistencies.
+
+### `yarn run check`
+
+Analyzes code types using the Typescript compiler without generating report.
+
+### `yarn run format`
+
+Formats all files in the current directory and its subdirectories with the specified file extensions using Prettier. This helps ensure consistent code style across the project.
+
+### `yarn run clear`
+
+Removes the specified directories and their contents, including compiled output, dependencies, cache files, and coverage reports.
 
 ## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+To learn React, check out the [React documentation](https://reactjs.org/).\
+To learn TypeScript, check out the [TypeScript documentation](https://www.typescriptlang.org/docs/).\
+To learn about Eslint, check out the [Eslint documentation](https://eslint.org/docs/latest/).\
+To learn about Prettier, check out the [Prettier documentation](https://prettier.io/docs/en/).\
+To learn about Parcel, check out the [Parcel documentation](https://parceljs.org/docs/).\
+To learn about Mantine, check out the [Mantine documentation](https://mantine.dev/).\
+To learn about Axios, check out the [Axios documentation](https://axios-http.com/docs/intro).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Deployment
+
+#### 1. Set up CI/CD:
+- Create a pipeline that triggers on code pushes to your desired branch.
+- Define the following steps in your pipeline:
+    - Checkout code: Clone your repository.
+    - Install dependencies: Run `yarn install`.
+    - Build the app: Run `yarn run build`.
+    - Deploy to server: Use your CI/CD provider's deployment features to deploy the dist folder to your chosen hosting platform.
+
+#### 2. Configure Hosting:
+- Choose a static hosting provider (e.g., Netlify, Vercel, AWS S3).
+- Connect your repository to the provider.
+- Configure the build command to `yarn run build`.
+- Set the deploy directory to dist.
+
+### TODOs
+
+- Preload images
+- Add PWA meta tags to `index.html`
+- Add social meta tags to `index.html`
+- Reorganize and split components 
+
+### Contribute
+
+- Fork the repository to your personal GitHub account.
+- Create a new branch for your feature or bug fix.
+- Commit your changes with clear and concise commit messages.
+- Push your changes to your remote branch.
+- Create a pull request from your branch to the main branch of the original repository:
+    - Provide a clear and concise description of your changes in the pull request.
+    - Address any feedback from the maintainers or other contributors.
+
+### Security
+
+TODO
+
+### Arhitecture
+
+TODO
 
 ### Code Splitting
 
@@ -54,18 +110,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/c
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
 ### Advanced Configuration
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

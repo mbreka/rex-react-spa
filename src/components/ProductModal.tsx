@@ -1,11 +1,9 @@
 import React, { FC, useContext, useEffect, useState } from "react";
-import { useDisclosure } from "@mantine/hooks";
-import { Modal, Button, Text, Image, ActionIcon, Badge, Box, Card, Group, rem, Table, Rating } from "@mantine/core";
+import { Modal, Text, Image, ActionIcon, Badge, Box, Card, Group, rem, Table, Rating } from "@mantine/core";
 import { AppContext } from "@/providers/AppProvider";
-import { getProducts } from "@/api";
 import { CartMeta, ProductI, ReviewI } from "@/types/interfaces";
 import { Carousel } from "@mantine/carousel";
-import { IconEye, IconChevronDown, IconChevronUp } from "@tabler/icons-react";
+import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
 
 const ReviewCard: FC<{ review: ReviewI }> = ({ review: { rating, comment, date, reviewerName, reviewerEmail } }) => {
   return (
@@ -50,26 +48,28 @@ const ProductDetails: FC<{ product: ProductI }> = ({ product }) => {
 
   const [productMeta, setProductMeta] = useState<CartMeta<ProductI>>();
   useEffect(() => {
-    // console.log({ productMeta });
-
     setProductMeta(getProductCartMeta(product));
   }, [product, cart]);
 
   return (
     <>
       <Box style={{ height: "100%", justifyContent: "space-between" }}>
-        
-      <Box style={{ height: "100%", maxHeight: 400, display: 'flex' }}>
-        <Carousel withIndicators height="100%" style={{ flex: 1 }} slideGap={{ base: 0, sm: 'md' }} slideSize={{ base: '100%', sm: '50%', md: '33.333333%' }}>
-
-          {images.map((src, index) => {
-            return (
-              <Carousel.Slide key={src}>
-                <Image key={index} src={src} />
-              </Carousel.Slide>
-            );
-          })}
-        </Carousel>
+        <Box style={{ height: "100%", maxHeight: 400, display: "flex" }}>
+          <Carousel
+            withIndicators
+            height="100%"
+            style={{ flex: 1 }}
+            slideGap={{ base: 0, sm: "md" }}
+            slideSize={{ base: "100%", sm: "50%", md: "33.333333%" }}
+          >
+            {images.map((src, index) => {
+              return (
+                <Carousel.Slide key={src}>
+                  <Image key={index} src={src} />
+                </Carousel.Slide>
+              );
+            })}
+          </Carousel>
         </Box>
 
         <Group justify="space-between" mt="md" mb="xs">
@@ -79,9 +79,7 @@ const ProductDetails: FC<{ product: ProductI }> = ({ product }) => {
           {discountPercentage > 0 && <Badge color="pink">-{discountPercentage}%</Badge>}
         </Group>
 
-        <Group justify="space-between" mt="md" mb="xs">
-       
-        </Group>
+        <Group justify="space-between" mt="md" mb="xs"></Group>
         <Text
           onClick={() => {
             setSelected(product);
@@ -92,7 +90,7 @@ const ProductDetails: FC<{ product: ProductI }> = ({ product }) => {
           {description}
         </Text>
         <Group justify="space-between" my="xl" mb="xs">
-        <Rating value={rating} size={"lg"} />
+          <Rating value={rating} size={"lg"} />
           <ActionIcon.Group>
             <ActionIcon
               variant="default"
@@ -128,7 +126,9 @@ const ProductDetails: FC<{ product: ProductI }> = ({ product }) => {
         </Group>
 
         <Group justify="space-between" mt="md" mb="xs">
-          <Text size="lg" fw={500}>Details</Text>
+          <Text size="lg" fw={500}>
+            Details
+          </Text>
           <Table>
             <Table.Tbody>
               <Table.Tr>
@@ -183,7 +183,9 @@ const ProductDetails: FC<{ product: ProductI }> = ({ product }) => {
           </Table>
         </Group>
         <Group justify="space-between" mt="md" mb="xs">
-          <Text size="lg" fw={500}>Dimensions</Text>
+          <Text size="lg" fw={500}>
+            Dimensions
+          </Text>
           <Table>
             <Table.Tbody>
               <Table.Tr>

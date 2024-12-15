@@ -18,9 +18,9 @@ const _getProductsByCategory: (category?: string) => Promise<ProductsResponseI> 
 
 const getProductWrapperForFilterByCategory: (query?: QueryI) => Promise<ProductsResponseI> = async (query) => {
   const queryWithoutCategories = { ...query };
+  delete queryWithoutCategories.categories;
 
   if (query?.categories === undefined || query?.categories?.length === 0) {
-    delete queryWithoutCategories.categories;
     return _getProducts(queryWithoutCategories);
   }
 
