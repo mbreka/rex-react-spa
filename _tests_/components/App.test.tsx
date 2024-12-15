@@ -8,7 +8,7 @@ import { renderWithProviders } from "../renderWithProviders";
 
 test("loads and displays app", async () => {
   // ARRANGE
-  renderWithProviders(<App />, { providerProps: { } });
+  renderWithProviders(<App />, { providerProps: {} });
 
   // ACT
   await userEvent.click(screen.getByText("Search products:"));

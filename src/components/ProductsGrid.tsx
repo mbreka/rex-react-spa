@@ -1,5 +1,4 @@
 import React, { FC, useContext, useEffect, useState } from "react";
-import { useDisclosure } from "@mantine/hooks";
 import {
   Modal,
   Button,
@@ -22,18 +21,8 @@ import {
   Stack,
 } from "@mantine/core";
 import { AppContext } from "@/providers/AppProvider";
-import { getProducts } from "@/api";
 import { CartMeta, ProductI, ReviewI } from "@/types/interfaces";
-import {
-  IconChartFunnel,
-  IconChevronDown,
-  IconChevronUp,
-  IconEye,
-  IconFilter,
-  IconSearch,
-  IconSort09,
-  IconSort90,
-} from "@tabler/icons-react";
+import { IconChevronDown, IconChevronUp, IconEye, IconFilter, IconSearch } from "@tabler/icons-react";
 import { CategoriesSelect } from "./CategoriesSelect";
 import { LoadingImage } from "./LoadingImage";
 
@@ -66,8 +55,6 @@ const ProductCard: FC<{ product: ProductI }> = ({ product }) => {
     useContext(AppContext)!;
   const [productMeta, setProductMeta] = useState<CartMeta<ProductI>>();
   useEffect(() => {
-    // console.log({ productMeta });
-
     setProductMeta(getProductCartMeta(product));
   }, [product, cart]);
 
@@ -180,7 +167,7 @@ const ProductsGrid: FC = () => {
   const [search, setSearch] = useState<string>("");
   const [filterCategories, setFilterCategories] = useState<string[]>([]);
 
-  const { selected, setSelected, products, queryProducts, totalProducts, categories } = useContext(AppContext)!;
+  const { products, queryProducts, totalProducts, categories } = useContext(AppContext)!;
 
   useEffect(() => {
     queryProducts({
@@ -192,19 +179,9 @@ const ProductsGrid: FC = () => {
     });
   }, [limit, page, sort, filterCategories]);
 
-  useEffect(() => {
-    // console.log(totalProducts / page);
-    // console.log({ totalProducts, productPerPage: page });
-    // console.log(Math.ceil(totalProducts / page));
-  }, [page, totalProducts, sort]);
-
   return (
     <>
       <Box mb={rem(20)}>
-        {/* <Input.Wrapper label="Search" description="Input description"> */}
-        {/* <TextInput placeholder="Input component" styles={{section: { pointerEvents: 'none' }, root: {pointerEvents: 'none'}}} rightSection={} /> */}
-        {/* <Button>Search</Button> */}
-        {/* </Input.Wrapper> */}
         <Center>
           <Box display={"flex"} w={{ base: "100%", md: "50%" }}>
             <Text>Search products:</Text>
@@ -264,6 +241,7 @@ const ProductsGrid: FC = () => {
                 <CategoriesSelect
                   categories={categories}
                   onFilterChange={(v) => {
+                    setPage(1);
                     setFilterCategories(v);
                   }}
                 />
@@ -271,6 +249,7 @@ const ProductsGrid: FC = () => {
                   <NativeSelect
                     value={sort}
                     onChange={(e) => {
+                      setPage(1);
                       setSort(e.target.value);
                     }}
                     label="Sort by"
@@ -280,6 +259,7 @@ const ProductsGrid: FC = () => {
                   <NativeSelect
                     value={limit}
                     onChange={(e) => {
+                      setPage(1);
                       setLimit(Number(e.target.value));
                     }}
                     label="Result per page"

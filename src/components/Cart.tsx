@@ -3,13 +3,10 @@ import { ActionIcon, Center, Group, Table, Text, rem } from "@mantine/core";
 import { CartMeta, ProductI } from "@/types/interfaces";
 import { AppContext } from "@/providers/AppProvider";
 import { IconChevronDown, IconChevronUp, IconMoodEmpty } from "@tabler/icons-react";
-import { Link } from "react-router";
-
 import { ProductModal } from "./ProductModal";
 
 const CartRow: FC<{ product: CartMeta<ProductI> }> = ({ product }) => {
-  const { selected, setSelected, totalProducts, cart, getProductCartMeta, removeProductFromCart, addProductToCart } =
-    useContext(AppContext)!;
+  const { setSelected, removeProductFromCart, addProductToCart } = useContext(AppContext)!;
 
   return (
     <>

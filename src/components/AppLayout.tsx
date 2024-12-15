@@ -3,8 +3,6 @@ import { AppShell, Burger, Group, Image, Skeleton, Box, Text, ScrollArea, Contai
 import { useDisclosure } from "@mantine/hooks";
 import logo from "../../public/logo.svg";
 import { App } from "./App";
-import { ProductModal } from "./ProductModal";
-import { ProductsGrid } from "./ProductsGrid";
 import { AppNavbar } from "./AppNavbar";
 import { Route, Routes, useLocation } from "react-router";
 import { Login } from "./Login";
@@ -14,9 +12,9 @@ const AppLayout: FC = () => {
   const [opened, { toggle, close }] = useDisclosure();
   const location = useLocation();
 
-  useEffect(()=>{
+  useEffect(() => {
     close();
-  }, [location])
+  }, [location]);
 
   return (
     <Container size={"xl"}>
@@ -35,16 +33,9 @@ const AppLayout: FC = () => {
         <AppShell.Navbar p="md" h={"100%"} style={{ overflowY: "scroll" }}>
           <ScrollArea>
             <AppNavbar />
-            {/* {Array(15)
-            .fill(0)
-            .map((_, index) => (
-              <Skeleton key={index} h={28} mt="sm" animate={false} />
-            ))} */}
           </ScrollArea>
         </AppShell.Navbar>
         <AppShell.Main>
-          {/* <App /> */}
-
           <Routes>
             <Route path="/" element={<App />} />
             <Route path="/login" element={<Login />} />

@@ -75,7 +75,7 @@ const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) =>
         )!;
         setCart({ ...cart, [storagekey]: updatedCart });
       } else {
-        setCart({ ...cart, [storagekey]: [...cart[storagekey], {...product, quantity: 1}] });
+        setCart({ ...cart, [storagekey]: [...cart[storagekey], { ...product, quantity: 1 }] });
       }
     } else {
       setCart({ ...cart, [storagekey]: [product] });
