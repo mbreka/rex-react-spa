@@ -1,8 +1,8 @@
 import "@testing-library/jest-dom";
-import { users } from "../../src/api";
+import { getUsers } from "../../src/api";
 
 test("users endpoints", async () => {
-  const resUsers = await users();
+  const resUsers = await getUsers();
   // console.log(resUsers);
   expect(resUsers).not.toBeFalsy();
 });

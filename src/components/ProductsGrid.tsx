@@ -35,6 +35,7 @@ import {
   IconSort90,
 } from "@tabler/icons-react";
 import { CategoriesSelect } from "./CategoriesSelect";
+import { LoadingImage } from "./LoadingImage";
 
 const ProductCard: FC<{ product: ProductI }> = ({ product }) => {
   const {
@@ -71,13 +72,19 @@ const ProductCard: FC<{ product: ProductI }> = ({ product }) => {
   }, [product, cart]);
 
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder style={{ height: "100%", justifyContent: "space-between" }}>
+    <Card
+      shadow="sm"
+      padding="lg"
+      radius="md"
+      withBorder
+      style={{ height: "100%", justifyContent: "space-between", cursor: "pointer" }}
+    >
       <Card.Section
         onClick={() => {
           setSelected(product);
         }}
       >
-        <Image src={thumbnail} h={160} alt={"Image of " + title} />
+        <LoadingImage src={thumbnail} h={200} alt={"Image of " + title} />
       </Card.Section>
 
       <Group
@@ -200,9 +207,9 @@ const ProductsGrid: FC = () => {
         {/* </Input.Wrapper> */}
         <Center>
           <Box display={"flex"} w={{ base: "100%", md: "50%" }}>
-          <Text>Search products:</Text>
+            <Text>Search products:</Text>
           </Box>
-          </Center>
+        </Center>
         <Center>
           <Center display={"flex"} w={{ base: "100%", md: "50%" }}>
             <TextInput
@@ -253,36 +260,33 @@ const ProductsGrid: FC = () => {
         <Center>
           <Center w={{ base: "100%", md: "50%" }}>
             {filters && (
-              
-                <Stack mt={rem(16)} w={
-                  "100%"
-                }>
-                  <CategoriesSelect
-                    categories={categories}
-                    onFilterChange={(v) => {
-                      setFilterCategories(v);
+              <Stack mt={rem(16)} w={"100%"}>
+                <CategoriesSelect
+                  categories={categories}
+                  onFilterChange={(v) => {
+                    setFilterCategories(v);
+                  }}
+                />
+                <Box style={{ display: "flex", flexDirection: "row", gap: rem(20) }}>
+                  <NativeSelect
+                    value={sort}
+                    onChange={(e) => {
+                      setSort(e.target.value);
                     }}
+                    label="Sort by"
+                    data={["Price ascending", "Price descending", "Title ascending", "Title descending"]}
                   />
-                  <Box style={{ display: "flex", flexDirection: "row", gap: rem(20) }}>
-                    <NativeSelect
-                      value={sort}
-                      onChange={(e) => {
-                        setSort(e.target.value);
-                      }}
-                      label="Sort by"
-                      data={["Price ascending", "Price descending", "Title ascending", "Title descending"]}
-                    />
 
-                    <NativeSelect
-                      value={limit}
-                      onChange={(e) => {
-                        setLimit(Number(e.target.value));
-                      }}
-                      label="Result per page"
-                      data={["10", "20", "40"]}
-                    />
-                  </Box>
-                </Stack>
+                  <NativeSelect
+                    value={limit}
+                    onChange={(e) => {
+                      setLimit(Number(e.target.value));
+                    }}
+                    label="Result per page"
+                    data={["10", "20", "40"]}
+                  />
+                </Box>
+              </Stack>
             )}
           </Center>
         </Center>

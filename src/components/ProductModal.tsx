@@ -58,15 +58,19 @@ const ProductDetails: FC<{ product: ProductI }> = ({ product }) => {
   return (
     <>
       <Box style={{ height: "100%", justifyContent: "space-between" }}>
-        <Carousel withIndicators height={"auto"}>
+        
+      <Box style={{ height: "100%", maxHeight: 400, display: 'flex' }}>
+        <Carousel withIndicators height="100%" style={{ flex: 1 }} slideGap={{ base: 0, sm: 'md' }} slideSize={{ base: '100%', sm: '50%', md: '33.333333%' }}>
+
           {images.map((src, index) => {
             return (
               <Carousel.Slide key={src}>
-                <Image key={index} src={src} />;
+                <Image key={index} src={src} />
               </Carousel.Slide>
             );
           })}
         </Carousel>
+        </Box>
 
         <Group justify="space-between" mt="md" mb="xs">
           <Text size="xl" fw={700}>
