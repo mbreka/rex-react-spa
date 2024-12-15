@@ -193,11 +193,16 @@ const ProductsGrid: FC = () => {
 
   return (
     <>
-      <Card mb={rem(20)}>
+      <Box mb={rem(20)}>
         {/* <Input.Wrapper label="Search" description="Input description"> */}
         {/* <TextInput placeholder="Input component" styles={{section: { pointerEvents: 'none' }, root: {pointerEvents: 'none'}}} rightSection={} /> */}
         {/* <Button>Search</Button> */}
         {/* </Input.Wrapper> */}
+        <Center>
+          <Box display={"flex"} w={{ base: "100%", md: "50%" }}>
+          <Text>Search products:</Text>
+          </Box>
+          </Center>
         <Center>
           <Center display={"flex"} w={{ base: "100%", md: "50%" }}>
             <TextInput
@@ -248,8 +253,10 @@ const ProductsGrid: FC = () => {
         <Center>
           <Center w={{ base: "100%", md: "50%" }}>
             {filters && (
-              <Card>
-                <Stack>
+              
+                <Stack mt={rem(16)} w={
+                  "100%"
+                }>
                   <CategoriesSelect
                     categories={categories}
                     onFilterChange={(v) => {
@@ -263,7 +270,6 @@ const ProductsGrid: FC = () => {
                         setSort(e.target.value);
                       }}
                       label="Sort by"
-                      description="Product placement"
                       data={["Price ascending", "Price descending", "Title ascending", "Title descending"]}
                     />
 
@@ -272,20 +278,18 @@ const ProductsGrid: FC = () => {
                       onChange={(e) => {
                         setLimit(Number(e.target.value));
                       }}
-                      label="Items per page"
-                      description="Products shown per page"
+                      label="Result per page"
                       data={["10", "20", "40"]}
                     />
                   </Box>
                 </Stack>
-              </Card>
             )}
           </Center>
         </Center>
         <Center mt={rem(4)}>
           <Text>Query returned {totalProducts} results.</Text>
         </Center>
-      </Card>
+      </Box>
       <Grid
         gutter={10}
         type="container"
@@ -300,7 +304,7 @@ const ProductsGrid: FC = () => {
             );
           })}
       </Grid>
-      <Center w={"100%"} p={20}>
+      <Center w={"100%"} py={20}>
         <Pagination value={page} onChange={(v) => setPage(v)} total={Math.ceil(totalProducts / limit)} />
       </Center>
     </>

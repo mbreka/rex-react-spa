@@ -2,8 +2,6 @@ import React, { FC, useEffect, useState } from "react";
 import { PillsInput, Pill, Combobox, CheckIcon, Group, useCombobox } from "@mantine/core";
 import { CategoryI } from "@/types/interfaces";
 
-const groceries = ["🍎 Apples", "🍌 Bananas", "🥦 Broccoli", "🥕 Carrots", "🍫 Chocolate"];
-
 const CategoriesSelect: FC<{
   categories: CategoryI[];
   onFilterChange: (categories: string[]) => void;
@@ -28,7 +26,7 @@ const CategoriesSelect: FC<{
   ));
 
   const options = categories
-    // .filter((item) => item.name.toLowerCase().includes(search.trim().toLowerCase()))
+    .filter((item) => item.name.toLowerCase().includes(search.trim().toLowerCase()))
     .map((item) => (
       <Combobox.Option value={item.slug} key={item.slug} active={value.includes(item.slug)}>
         <Group gap="sm">
@@ -45,7 +43,7 @@ const CategoriesSelect: FC<{
   return (
     <Combobox store={combobox} onOptionSubmit={handleValueSelect}>
       <Combobox.DropdownTarget>
-        <PillsInput label="Search by category" description="Product category" onClick={() => combobox.openDropdown()}>
+        <PillsInput label="Filter by category" onClick={() => combobox.openDropdown()}>
           <Pill.Group>
             {values}
 

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { AppShell, Burger, Group, Image, Skeleton, Box, Text, ScrollArea, Container } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import logo from "../../public/logo.svg";
@@ -6,12 +6,17 @@ import { App } from "./App";
 import { ProductModal } from "./ProductModal";
 import { ProductsGrid } from "./ProductsGrid";
 import { AppNavbar } from "./AppNavbar";
-import { Route, Routes } from "react-router";
+import { Route, Routes, useLocation } from "react-router";
 import { Login } from "./Login";
 import { Cart } from "./Cart";
 
 const AppLayout: FC = () => {
-  const [opened, { toggle }] = useDisclosure();
+  const [opened, { toggle, close }] = useDisclosure();
+  const location = useLocation();
+
+  useEffect(()=>{
+    close();
+  }, [location])
 
   return (
     <Container size={"xl"}>

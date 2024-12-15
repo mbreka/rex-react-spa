@@ -1,8 +1,8 @@
 import React, { FC, useContext, useEffect, useState } from "react";
-import { ActionIcon, Table } from "@mantine/core";
+import { ActionIcon, Center, Group, Table, Text, rem } from "@mantine/core";
 import { CartMeta, ProductI } from "@/types/interfaces";
 import { AppContext } from "@/providers/AppProvider";
-import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
+import { IconChevronDown, IconChevronUp, IconMoodEmpty } from "@tabler/icons-react";
 import { Link } from "react-router";
 
 import { ProductModal } from "./ProductModal";
@@ -15,6 +15,9 @@ const CartRow: FC<{ product: CartMeta<ProductI> }> = ({ product }) => {
     <>
       <Table.Tr key={product.item.id}>
         <Table.Td
+          td={"underline"}
+          role="button"
+          style={{ cursor: "pointer" }}
           onClick={() => {
             setSelected(product.item);
           }}
@@ -62,7 +65,7 @@ const CartRow: FC<{ product: CartMeta<ProductI> }> = ({ product }) => {
 };
 
 const CartTable: FC<{ products: CartMeta<ProductI>[] }> = ({ products }) => {
-  const rows = products && products.map((p, i) => <CartRow product={p} key={i} />);
+  const rows = products && products.filter((p) => p.quantity > 0).map((p, i) => <CartRow product={p} key={i} />);
   return (
     <Table stickyHeader stickyHeaderOffset={60}>
       <Table.Thead>
@@ -73,8 +76,24 @@ const CartTable: FC<{ products: CartMeta<ProductI>[] }> = ({ products }) => {
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>{rows}</Table.Tbody>
-      <Table.Caption>Scroll page</Table.Caption>
+      {/* <Table.Caption>Scroll page</Table.Caption> */}
     </Table>
+  );
+};
+
+const CartInfo: FC<{ products: CartMeta<ProductI>[] }> = ({ products }) => {
+  const total =
+    products &&
+    products
+      .filter((p) => p.quantity > 0)
+      .map((p) => p.quantity * p.item.price)
+      .reduce((p, c) => p + c, 0);
+  return (
+    <Group>
+      <Text size="xl" fw={700} mt={"lg"}>
+        Total: {total.toFixed(2)}$
+      </Text>
+    </Group>
   );
 };
 
@@ -83,7 +102,17 @@ const Cart: FC = () => {
   return (
     <>
       <ProductModal />
-      <CartTable products={cart} />
+      {cart && cart.filter((i) => i.quantity > 0).length > 0 ? (
+        <>
+          <CartTable products={cart} />
+          <CartInfo products={cart} />
+        </>
+      ) : (
+        <Center display={"flex"} style={{ flexDirection: "column" }}>
+          <IconMoodEmpty size={rem(180)} />
+          <Text size="xl">Your cart is empty.</Text>
+        </Center>
+      )}
     </>
   );
 };
