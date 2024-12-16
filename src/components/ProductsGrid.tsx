@@ -19,12 +19,14 @@ import {
   TextInput,
   Space,
   Stack,
+  RangeSlider,
 } from "@mantine/core";
 import { AppContext } from "@/providers/AppProvider";
 import { CartMeta, ProductI, ReviewI } from "@/types/interfaces";
 import { IconChevronDown, IconChevronUp, IconEye, IconFilter, IconSearch } from "@tabler/icons-react";
 import { CategoriesSelect } from "./CategoriesSelect";
 import { LoadingImage } from "./LoadingImage";
+import { formatCurrency } from "@/helpers";
 
 const ProductCard: FC<{ product: ProductI }> = ({ product }) => {
   const {
@@ -85,7 +87,7 @@ const ProductCard: FC<{ product: ProductI }> = ({ product }) => {
         <Text fw={500}>{title}</Text>
       </Group>
       <Group justify="space-between" mt="md" mb="xs">
-        <Text fw={500}>{price}$</Text>
+        <Text fw={500}>{formatCurrency(price)}</Text>
         {discountPercentage > 0 && <Badge color="pink">-{discountPercentage}%</Badge>}
       </Group>
 
@@ -164,20 +166,27 @@ const ProductsGrid: FC = () => {
   const [limit, setLimit] = useState<number>(20);
   const [sort, setSort] = useState<string>("Title ascending");
   const [page, setPage] = useState<number>(1);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 38000]);
+  const [priceRangeTemp, setPriceRangeTemp] = useState<[number, number]>([0, 38000]);
+
   const [search, setSearch] = useState<string>("");
   const [filterCategories, setFilterCategories] = useState<string[]>([]);
 
   const { products, queryProducts, totalProducts, categories } = useContext(AppContext)!;
 
-  useEffect(() => {
+  const queryWithFilters = () =>
     queryProducts({
       limit,
       skip: (page - 1) * limit,
       q: search,
       ...getSortOrderObjectFromString(sort),
       categories: filterCategories,
+      priceRange: priceRange,
     });
-  }, [limit, page, sort, filterCategories]);
+
+  useEffect(() => {
+    queryWithFilters();
+  }, [limit, page, sort, filterCategories, priceRange]);
 
   return (
     <>
@@ -198,11 +207,7 @@ const ProductsGrid: FC = () => {
                 if (["Enter"].includes(e.key)) {
                   e.preventDefault();
                   setPage(1);
-                  queryProducts({
-                    limit,
-                    q: search,
-                    ...getSortOrderObjectFromString(sort),
-                  });
+                  queryWithFilters();
                 }
               }}
               w={"100%"}
@@ -222,11 +227,7 @@ const ProductsGrid: FC = () => {
             <ActionIcon
               onClick={() => {
                 setPage(1);
-                queryProducts({
-                  limit,
-                  q: search,
-                  ...getSortOrderObjectFromString(sort),
-                });
+                queryWithFilters();
               }}
               size={"lg"}
             >
@@ -236,38 +237,57 @@ const ProductsGrid: FC = () => {
         </Center>
         <Center>
           <Center w={{ base: "100%", md: "50%" }}>
-            {filters && (
-              <Stack mt={rem(16)} w={"100%"}>
-                <CategoriesSelect
-                  categories={categories}
-                  onFilterChange={(v) => {
+            <Stack mt={rem(16)} w={"100%"} display={filters ? "block" : "none"}>
+              <CategoriesSelect
+                categories={categories}
+                onFilterChange={(v) => {
+                  setPage(1);
+                  setFilterCategories(v);
+                }}
+              />
+              <Box style={{ display: "flex", flexDirection: "row", gap: rem(20) }}>
+                <NativeSelect
+                  value={sort}
+                  onChange={(e) => {
                     setPage(1);
-                    setFilterCategories(v);
+                    setSort(e.target.value);
+                  }}
+                  label="Sort by"
+                  data={["Price ascending", "Price descending", "Title ascending", "Title descending"]}
+                />
+
+                <NativeSelect
+                  value={limit}
+                  onChange={(e) => {
+                    setPage(1);
+                    setLimit(Number(e.target.value));
+                  }}
+                  label="Result per page"
+                  data={["10", "20", "40"]}
+                />
+              </Box>
+              <Box>
+                <Text size="sm" fw={500}>
+                  Filter by price
+                </Text>
+              <RangeSlider
+                  label={(c) => <>{formatCurrency(c)}</>}
+                  minRange={10}
+                  min={0}
+                  max={38000}
+                  step={1}
+                  value={priceRangeTemp}
+                  onChange={(newPriceRange) => {
+                    setPriceRangeTemp(newPriceRange);
+                  }}
+                  onChangeEnd={(newPriceRange) => {
+                    setPage(1);
+                    setPriceRangeTemp(newPriceRange);
+                    setPriceRange(newPriceRange);
                   }}
                 />
-                <Box style={{ display: "flex", flexDirection: "row", gap: rem(20) }}>
-                  <NativeSelect
-                    value={sort}
-                    onChange={(e) => {
-                      setPage(1);
-                      setSort(e.target.value);
-                    }}
-                    label="Sort by"
-                    data={["Price ascending", "Price descending", "Title ascending", "Title descending"]}
-                  />
-
-                  <NativeSelect
-                    value={limit}
-                    onChange={(e) => {
-                      setPage(1);
-                      setLimit(Number(e.target.value));
-                    }}
-                    label="Result per page"
-                    data={["10", "20", "40"]}
-                  />
-                </Box>
-              </Stack>
-            )}
+              </Box>
+            </Stack>
           </Center>
         </Center>
         <Center mt={rem(4)}>

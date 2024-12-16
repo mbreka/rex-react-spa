@@ -7,6 +7,7 @@ export interface QueryI {
   order?: string;
   categories?: string[];
   q?: string;
+  priceRange?: [number, number];
 }
 
 export interface ResponseBaseI {
