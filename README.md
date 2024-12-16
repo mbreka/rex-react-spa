@@ -75,10 +75,12 @@ To learn about Axios, check out the [Axios documentation](https://axios-http.com
 - Choose a static hosting provider (e.g., Netlify, Vercel, AWS S3).
 - Connect your repository to the provider.
 - Configure the build command to `yarn run build`.
-- Set the deploy directory to dist.
+- Set the deploy directory to `dist`.
 
 ### TODOs
 
+- Add filter by price range (ex. 10$-50$, 50$-100$, 100$+…)
+- Add product reviews
 - Preload images
 - Add PWA meta tags to `index.html`
 - Add social meta tags to `index.html`

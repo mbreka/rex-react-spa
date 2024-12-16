@@ -4,6 +4,7 @@ import { AppContext } from "@/providers/AppProvider";
 import { CartMeta, ProductI, ReviewI } from "@/types/interfaces";
 import { Carousel } from "@mantine/carousel";
 import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
+import { formatCurrency } from "@/helpers";
 
 const ReviewCard: FC<{ review: ReviewI }> = ({ review: { rating, comment, date, reviewerName, reviewerEmail } }) => {
   return (
@@ -74,7 +75,7 @@ const ProductDetails: FC<{ product: ProductI }> = ({ product }) => {
 
         <Group justify="space-between" mt="md" mb="xs">
           <Text size="xl" fw={700}>
-            {price}$
+            {formatCurrency(price)}
           </Text>
           {discountPercentage > 0 && <Badge color="pink">-{discountPercentage}%</Badge>}
         </Group>

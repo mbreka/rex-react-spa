@@ -71,11 +71,14 @@ const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) =>
         const updatedCart = cart[storagekey]!.map((ce) =>
           ce.item.id !== product.item.id
             ? ce
-            : { ...ce, quantity: !ce.quantity || ce.quantity === 0 ? 1 : ce.quantity + 1 },
+            : { ...ce, quantity: !ce.quantity || ce.quantity === 0 ? ce.item.minimumOrderQuantity : ce.quantity + 1 },
         )!;
         setCart({ ...cart, [storagekey]: updatedCart });
       } else {
-        setCart({ ...cart, [storagekey]: [...cart[storagekey], { ...product, quantity: 1 }] });
+        setCart({
+          ...cart,
+          [storagekey]: [...cart[storagekey], { ...product, quantity: product.item.minimumOrderQuantity }],
+        });
       }
     } else {
       setCart({ ...cart, [storagekey]: [product] });
@@ -86,7 +89,9 @@ const AppProvider: FC<{ children: ReactNode | ReactNode[] }> = ({ children }) =>
     const storageExist = cart[storagekey];
     if (storageExist) {
       const updatedCart = cart[storagekey]!.map((ce) =>
-        ce.item.id !== product.item.id ? ce : { ...ce, quantity: ce.quantity < 1 ? 0 : ce.quantity - 1 },
+        ce.item.id !== product.item.id
+          ? ce
+          : { ...ce, quantity: ce.quantity <= ce.item.minimumOrderQuantity ? 0 : ce.quantity - 1 },
       )!;
       setCart({ ...cart, [storagekey]: updatedCart });
     }

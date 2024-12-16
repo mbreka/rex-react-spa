@@ -4,6 +4,7 @@ import { CartMeta, ProductI } from "@/types/interfaces";
 import { AppContext } from "@/providers/AppProvider";
 import { IconChevronDown, IconChevronUp, IconMoodEmpty } from "@tabler/icons-react";
 import { ProductModal } from "./ProductModal";
+import { formatCurrency } from "@/helpers";
 
 const CartRow: FC<{ product: CartMeta<ProductI> }> = ({ product }) => {
   const { setSelected, removeProductFromCart, addProductToCart } = useContext(AppContext)!;
@@ -21,7 +22,7 @@ const CartRow: FC<{ product: CartMeta<ProductI> }> = ({ product }) => {
         >
           {product.item.title}
         </Table.Td>
-        <Table.Td>{product.item.price}$</Table.Td>
+        <Table.Td>{formatCurrency(product.item.price)}</Table.Td>
         <Table.Td>
           <ActionIcon.Group>
             <ActionIcon
@@ -38,8 +39,7 @@ const CartRow: FC<{ product: CartMeta<ProductI> }> = ({ product }) => {
               <IconChevronDown color="var(--mantine-color-red-text)" />
             </ActionIcon>
             <ActionIcon.GroupSection variant="default" size="sm" bg="var(--mantine-color-body)" miw={60}>
-              {/* {value} */}
-              {product?.quantity || 0}
+              {(product?.quantity || 0)}
             </ActionIcon.GroupSection>
             <ActionIcon
               variant="default"
@@ -88,7 +88,7 @@ const CartInfo: FC<{ products: CartMeta<ProductI>[] }> = ({ products }) => {
   return (
     <Group>
       <Text size="xl" fw={700} mt={"lg"}>
-        Total: {total.toFixed(2)}$
+        Total: {formatCurrency(total)}
       </Text>
     </Group>
   );
